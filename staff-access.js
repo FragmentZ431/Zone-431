@@ -285,31 +285,42 @@ async function checkStaffAccess() {
         // ON SUPPRIME L'ANCIENNE SESSION
         // =================================================
 
-        const {
-            error: signOutError
-        } =
-            await supabaseClient.auth.signOut();
+       let {
+    data: sessionData,
+    error: sessionError
+} = await supabaseClient.auth.getSession();
 
+if (sessionError) {
+    console.error(
+        "ZONE-431 — Erreur récupération session :",
+        sessionError
+    );
+    showStaffMessage(
+        "ERREUR D'AUTHENTIFICATION.",
+        "error"
+    );
+    return;
+}
 
-        if (signOutError) {
+if (!sessionData || !sessionData.session) {
+    const result =
+        await supabaseClient.auth.signInAnonymously();
 
-            console.warn(
-                "ZONE-431 — Erreur déconnexion session précédente :",
-                signOutError
-            );
+    sessionData = result.data;
+    sessionError = result.error;
 
-        }
-
-
-        // =================================================
-        // NOUVELLE SESSION ANONYME
-        // =================================================
-
-        const {
-            data: sessionData,
-            error: sessionError
-        } =
-            await supabaseClient.auth.signInAnonymously();
+    if (sessionError) {
+        console.error(
+            "ZONE-431 — Erreur création session :",
+            sessionError
+        );
+        showStaffMessage(
+            "ERREUR D'AUTHENTIFICATION.",
+            "error"
+        );
+        return;
+    }
+}
 
 
         if (sessionError) {
