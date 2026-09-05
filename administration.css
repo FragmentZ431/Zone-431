@@ -1,0 +1,1688 @@
+/* =========================================================
+   ZONE-431 — ADMINISTRATION
+   ========================================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    min-height: 100vh;
+
+    background:
+        radial-gradient(
+            circle at 50% 0%,
+            rgba(150, 0, 0, 0.14),
+            transparent 45%
+        ),
+        #050505;
+
+    color: #e8e8e8;
+
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+button,
+input,
+select {
+    font-family: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+
+/* =========================================================
+   PAGE
+   ========================================================= */
+
+.administration-page {
+    min-height: 100vh;
+}
+
+
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+.topbar {
+    position: sticky;
+    top: 0;
+
+    z-index: 100;
+
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 55px;
+
+    background: rgba(7, 7, 7, 0.97);
+
+    border-bottom: 1px solid #252525;
+
+    backdrop-filter: blur(10px);
+}
+
+
+/* LOGO */
+
+.logo {
+    color: #ffffff;
+
+    font-size: 25px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+
+    transition: 0.2s ease;
+}
+
+.logo span {
+    color: #c00000;
+}
+
+.logo:hover {
+    text-shadow:
+        0 0 15px rgba(192, 0, 0, 0.35);
+}
+
+
+/* NAVIGATION */
+
+.topbar nav {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.topbar nav a {
+    position: relative;
+
+    padding: 29px 17px;
+
+    color: #858585;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+
+    transition:
+        color 0.2s ease,
+        background 0.2s ease;
+}
+
+.topbar nav a:hover {
+    color: #ffffff;
+
+    background: rgba(255, 255, 255, 0.035);
+}
+
+.topbar nav a.active {
+    color: #ffffff;
+}
+
+.topbar nav a.active::after {
+    content: "";
+
+    position: absolute;
+
+    left: 17px;
+    right: 17px;
+    bottom: 0;
+
+    height: 2px;
+
+    background: #c00000;
+
+    box-shadow:
+        0 0 12px rgba(192, 0, 0, 0.8);
+}
+
+
+/* =========================================================
+   HEADER
+   ========================================================= */
+
+.page-header {
+    position: relative;
+
+    padding: 90px 8% 75px;
+
+    overflow: hidden;
+
+    border-bottom: 1px solid #222;
+}
+
+.page-header::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            transparent,
+            #c00000,
+            transparent
+        );
+}
+
+.page-header::after {
+    content: "";
+
+    position: absolute;
+
+    width: 500px;
+    height: 500px;
+
+    right: -170px;
+    top: -180px;
+
+    border: 1px solid rgba(192, 0, 0, 0.12);
+
+    border-radius: 50%;
+
+    box-shadow:
+        0 0 80px rgba(192, 0, 0, 0.04);
+}
+
+.page-header span {
+    display: block;
+
+    margin-bottom: 15px;
+
+    color: #777;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 3px;
+}
+
+.page-header h1 {
+    color: #ffffff;
+
+    font-size: clamp(40px, 5vw, 64px);
+
+    font-weight: 900;
+
+    letter-spacing: 5px;
+
+    line-height: 1;
+}
+
+.page-header p {
+    margin-top: 22px;
+
+    color: #858585;
+
+    font-size: 14px;
+
+    letter-spacing: 0.5px;
+}
+
+
+/* =========================================================
+   CONTENU
+   ========================================================= */
+
+.administration-content {
+    width: min(1200px, 88%);
+
+    margin: 0 auto;
+
+    padding: 70px 0 90px;
+}
+
+
+/* =========================================================
+   TITRE
+   ========================================================= */
+
+.administration-top {
+    display: flex;
+
+    align-items: flex-end;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    margin-bottom: 35px;
+}
+
+.section-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #c00000;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+.administration-top h2 {
+    color: #ffffff;
+
+    font-size: 30px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+#accessStatus {
+    margin-top: 10px;
+
+    color: #666;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 1px;
+}
+
+
+/* =========================================================
+   BOUTON CRÉER
+   ========================================================= */
+
+.create-button {
+    min-height: 48px;
+
+    padding: 0 22px;
+
+    border: 1px solid #a00000;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a00000,
+            #700000
+        );
+
+    color: #ffffff;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    box-shadow:
+        0 0 20px rgba(160, 0, 0, 0.12);
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.create-button:hover {
+    transform: translateY(-2px);
+
+    border-color: #e00000;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c00000,
+            #850000
+        );
+
+    box-shadow:
+        0 0 25px rgba(192, 0, 0, 0.28);
+}
+
+
+/* =========================================================
+   RECHERCHE
+   ========================================================= */
+
+.search-box {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    width: 100%;
+    height: 54px;
+
+    margin-bottom: 30px;
+
+    padding: 0 18px;
+
+    background: #0a0a0a;
+
+    border: 1px solid #292929;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.search-box:focus-within {
+    border-color: #7d0000;
+
+    box-shadow:
+        0 0 20px rgba(192, 0, 0, 0.08);
+}
+
+.search-box span {
+    color: #c00000;
+
+    font-size: 16px;
+}
+
+.search-box input {
+    width: 100%;
+
+    border: 0;
+    outline: 0;
+
+    background: transparent;
+
+    color: #ffffff;
+
+    font-size: 12px;
+}
+
+.search-box input::placeholder {
+    color: #555;
+}
+
+
+/* =========================================================
+   LISTE
+   ========================================================= */
+
+.members-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 18px;
+}
+
+
+/* =========================================================
+   CARTE MEMBRE
+   ========================================================= */
+
+.staff-member-card {
+    position: relative;
+
+    overflow: hidden;
+
+    padding: 25px;
+
+    background:
+        linear-gradient(
+            145deg,
+            rgba(255, 255, 255, 0.035),
+            rgba(255, 255, 255, 0.008)
+        );
+
+    border: 1px solid #292929;
+
+    transition:
+        transform 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* Barre rouge à gauche */
+
+.staff-member-card::before {
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 3px;
+    height: 100%;
+
+    background:
+        linear-gradient(
+            180deg,
+            #c00000,
+            #650000
+        );
+}
+
+.staff-member-card:hover {
+    transform: translateY(-2px);
+
+    border-color: #444;
+
+    box-shadow:
+        0 10px 35px rgba(0, 0, 0, 0.3);
+}
+
+
+/* =========================================================
+   HEADER CARTE
+   ========================================================= */
+
+.member-card-header {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 20px;
+
+    padding-bottom: 20px;
+
+    border-bottom: 1px solid #242424;
+}
+
+.member-role {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #d00000;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.member-card-header h3 {
+    color: #ffffff;
+
+    font-size: 21px;
+    font-weight: 900;
+}
+
+
+/* =========================================================
+   STATUT — ACTIF / RÉVOQUÉ
+   ========================================================= */
+
+.member-status {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    padding: 8px 12px;
+
+    border: 1px solid;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1px;
+
+    white-space: nowrap;
+
+    transition:
+        box-shadow 0.2s ease;
+}
+
+
+/* Petit point */
+
+.member-status::before {
+    content: "";
+
+    width: 7px;
+    height: 7px;
+
+    border-radius: 50%;
+}
+
+
+/* ACCÈS ACTIF */
+
+.member-status.active {
+    color: #69e39b;
+
+    background:
+        rgba(45, 190, 105, 0.08);
+
+    border-color:
+        rgba(45, 190, 105, 0.45);
+
+    box-shadow:
+        inset 0 0 15px rgba(45, 190, 105, 0.03);
+}
+
+.member-status.active::before {
+    background: #39d477;
+
+    box-shadow:
+        0 0 8px rgba(57, 212, 119, 0.8);
+}
+
+
+/* ACCÈS RÉVOQUÉ */
+
+.member-status.inactive {
+    color: #ff5555;
+
+    background:
+        rgba(190, 20, 20, 0.10);
+
+    border-color:
+        rgba(210, 30, 30, 0.55);
+
+    box-shadow:
+        inset 0 0 15px rgba(190, 20, 20, 0.04);
+}
+
+.member-status.inactive::before {
+    background: #e00000;
+
+    box-shadow:
+        0 0 8px rgba(224, 0, 0, 0.8);
+}
+
+
+/* =========================================================
+   INFOS
+   ========================================================= */
+
+.member-card-info {
+    display: grid;
+
+    grid-template-columns:
+        repeat(3, 1fr);
+
+    gap: 15px;
+
+    padding: 20px 0;
+
+    border-bottom: 1px solid #242424;
+}
+
+.info-item {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    min-width: 0;
+}
+
+.info-item span {
+    color: #555;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+.info-item strong {
+    color: #d8d8d8;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+.warn-count {
+    color: #ff7a18 !important;
+
+    font-size: 16px !important;
+
+    text-shadow:
+        0 0 10px rgba(255, 122, 24, 0.2);
+}
+
+
+/* =========================================================
+   ACCÈS AUTORISÉS
+   ========================================================= */
+
+.member-access {
+    padding: 20px 0;
+
+    border-bottom: 1px solid #242424;
+}
+
+.access-title {
+    margin-bottom: 12px;
+
+    color: #555;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+.access-list {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 8px;
+}
+
+.access-tag {
+    display: inline-flex;
+
+    align-items: center;
+
+    gap: 6px;
+
+    padding: 7px 10px;
+
+    border: 1px solid #383838;
+
+    background:
+        rgba(255, 255, 255, 0.025);
+
+    color: #bdbdbd;
+
+    font-size: 9px;
+    font-weight: 800;
+
+    letter-spacing: 0.7px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.access-tag:first-letter {
+    color: #36d477;
+}
+
+.access-tag:hover {
+    color: #ffffff;
+
+    border-color: #555;
+
+    background:
+        rgba(255, 255, 255, 0.05);
+}
+
+
+/* =========================================================
+   ACTIONS
+   ========================================================= */
+
+.member-actions {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    gap: 9px;
+
+    padding-top: 20px;
+}
+
+.member-actions button {
+    min-height: 38px;
+
+    padding: 0 13px;
+
+    border: 1px solid #383838;
+
+    background: #0c0c0c;
+
+    color: #aaa;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.member-actions button:hover {
+    color: #ffffff;
+
+    border-color: #777;
+
+    background: #171717;
+}
+
+
+/* VOIR CODE */
+
+.member-actions button:first-child:hover {
+    border-color: #4b6cff;
+
+    background:
+        rgba(75, 108, 255, 0.08);
+
+    box-shadow:
+        0 0 12px rgba(75, 108, 255, 0.08);
+}
+
+
+/* MODIFIER */
+
+.member-actions button:nth-child(2):hover {
+    border-color: #b00000;
+
+    background:
+        rgba(176, 0, 0, 0.08);
+}
+
+
+/* RÉVOQUER */
+
+.member-actions button:nth-child(3):hover {
+    color: #ff6262;
+
+    border-color: #900000;
+
+    background:
+        rgba(176, 0, 0, 0.10);
+}
+
+
+/* REMETTRE */
+
+.member-actions button:nth-child(3):has(+ .delete-action):hover {
+    color: #63e69a;
+
+    border-color: #257545;
+
+    background:
+        rgba(45, 190, 105, 0.08);
+}
+
+
+/* SUPPRIMER */
+
+.member-actions .delete-action {
+    color: #d53535;
+
+    border-color: #5d1818;
+}
+
+.member-actions .delete-action:hover {
+    color: #ffffff;
+
+    border-color: #d00000;
+
+    background: #720000;
+
+    box-shadow:
+        0 0 15px rgba(192, 0, 0, 0.18);
+}
+
+
+/* =========================================================
+   CHARGEMENT
+   ========================================================= */
+
+.loading {
+    padding: 45px 20px;
+
+    text-align: center;
+
+    border: 1px solid #242424;
+
+    background: #0a0a0a;
+
+    color: #666;
+
+    font-size: 10px;
+    font-weight: 800;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   ERREUR
+   ========================================================= */
+
+.error-box {
+    padding: 25px;
+
+    border: 1px solid #750000;
+
+    background:
+        rgba(130, 0, 0, 0.09);
+
+    color: #ff4545;
+
+    text-align: center;
+
+    font-size: 11px;
+    font-weight: 800;
+
+    letter-spacing: 1px;
+}
+
+.error-box small {
+    color: #888;
+
+    font-size: 10px;
+    font-weight: 400;
+
+    letter-spacing: 0;
+}
+
+
+/* =========================================================
+   VIDE
+   ========================================================= */
+
+.empty-box {
+    padding: 60px 25px;
+
+    text-align: center;
+
+    border: 1px solid #242424;
+
+    background: #0a0a0a;
+}
+
+.empty-box h3 {
+    margin-bottom: 10px;
+
+    color: #aaa;
+
+    font-size: 15px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.empty-box p {
+    color: #555;
+
+    font-size: 12px;
+}
+
+
+/* =========================================================
+   MODALES
+   ========================================================= */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    padding: 25px;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-background {
+    position: absolute;
+
+    inset: 0;
+
+    background:
+        rgba(0, 0, 0, 0.84);
+
+    backdrop-filter: blur(6px);
+}
+
+
+/* =========================================================
+   BOÎTE MODALE
+   ========================================================= */
+
+.modal-box {
+    position: relative;
+
+    z-index: 1;
+
+    width: min(540px, 100%);
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 35px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #151515,
+            #080808
+        );
+
+    border: 1px solid #444;
+
+    box-shadow:
+        0 25px 80px rgba(0, 0, 0, 0.75),
+        0 0 45px rgba(150, 0, 0, 0.10);
+}
+
+.modal-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background:
+        linear-gradient(
+            90deg,
+            #700000,
+            #d00000,
+            #700000
+        );
+}
+
+.small-modal {
+    width: min(430px, 100%);
+
+    text-align: center;
+}
+
+
+/* =========================================================
+   FERMETURE MODALE
+   ========================================================= */
+
+.modal-close {
+    position: absolute;
+
+    top: 13px;
+    right: 15px;
+
+    width: 34px;
+    height: 34px;
+
+    border: 1px solid #363636;
+
+    background: #0d0d0d;
+
+    color: #777;
+
+    font-size: 23px;
+
+    line-height: 1;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.modal-close:hover {
+    color: #ffffff;
+
+    border-color: #a00000;
+
+    background: #2a0000;
+}
+
+
+/* =========================================================
+   TITRE MODALE
+   ========================================================= */
+
+.modal-label {
+    display: block;
+
+    margin-bottom: 10px;
+
+    color: #c00000;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 2.5px;
+}
+
+.modal-box h2 {
+    margin-bottom: 28px;
+
+    color: #ffffff;
+
+    font-size: 25px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+
+/* =========================================================
+   FORMULAIRE
+   ========================================================= */
+
+#memberForm {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 9px;
+}
+
+#memberForm label {
+    margin-top: 8px;
+
+    color: #777;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+}
+
+#memberForm input,
+#memberForm select {
+    width: 100%;
+    height: 44px;
+
+    padding: 0 13px;
+
+    border: 1px solid #353535;
+
+    outline: none;
+
+    background: #070707;
+
+    color: #eeeeee;
+
+    font-size: 12px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease;
+}
+
+#memberForm input:hover,
+#memberForm select:hover {
+    border-color: #4a4a4a;
+}
+
+#memberForm input:focus,
+#memberForm select:focus {
+    border-color: #9a0000;
+
+    background: #0b0b0b;
+
+    box-shadow:
+        0 0 14px rgba(192, 0, 0, 0.10);
+}
+
+#memberForm input::placeholder {
+    color: #4d4d4d;
+}
+
+#memberForm select {
+    cursor: pointer;
+}
+
+#memberForm select option {
+    background: #111111;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   CODE
+   ========================================================= */
+
+.code-input-wrapper {
+    position: relative;
+
+    width: 100%;
+}
+
+.code-input-wrapper input {
+    padding-right: 50px !important;
+}
+
+.show-code-button {
+    position: absolute;
+
+    top: 50%;
+    right: 7px;
+
+    width: 35px;
+    height: 32px;
+
+    transform: translateY(-50%);
+
+    border: 1px solid #303030;
+
+    background: #111111;
+
+    color: #777;
+
+    font-size: 14px;
+
+    transition:
+        color 0.2s ease,
+        border-color 0.2s ease,
+        background 0.2s ease;
+}
+
+.show-code-button:hover {
+    color: #ffffff;
+
+    border-color: #8b0000;
+
+    background: #220000;
+}
+
+
+/* =========================================================
+   BOUTONS MODALE
+   ========================================================= */
+
+.form-actions {
+    display: flex;
+
+    gap: 10px;
+
+    margin-top: 22px;
+}
+
+.form-actions button {
+    flex: 1;
+
+    height: 44px;
+
+    border: 1px solid;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 1.2px;
+
+    transition:
+        background 0.2s ease,
+        color 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+
+/* ANNULER */
+
+.cancel-button {
+    border-color: #383838 !important;
+
+    background: #101010;
+
+    color: #888;
+}
+
+.cancel-button:hover {
+    border-color: #666 !important;
+
+    background: #1b1b1b;
+
+    color: #ffffff;
+}
+
+
+/* ENREGISTRER */
+
+.save-button {
+    border-color: #a00000 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #a00000,
+            #720000
+        );
+
+    color: #ffffff;
+}
+
+.save-button:hover {
+    border-color: #d00000 !important;
+
+    background:
+        linear-gradient(
+            135deg,
+            #c00000,
+            #880000
+        );
+
+    box-shadow:
+        0 0 20px rgba(192, 0, 0, 0.20);
+}
+
+
+/* =========================================================
+   MODALE VOIR CODE
+   ========================================================= */
+
+.code-member-name {
+    margin-top: -15px;
+
+    margin-bottom: 22px;
+
+    color: #777;
+
+    font-size: 11px;
+
+    letter-spacing: 1px;
+}
+
+.visible-code {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    min-height: 70px;
+
+    margin-bottom: 18px;
+
+    padding: 15px;
+
+    border: 1px solid #3a3a3a;
+
+    background: #050505;
+
+    color: #ffffff;
+
+    font-family: monospace;
+
+    font-size: 18px;
+
+    letter-spacing: 2px;
+
+    word-break: break-all;
+
+    box-shadow:
+        inset 0 0 25px rgba(255, 255, 255, 0.02);
+}
+
+.close-code-button {
+    width: 100%;
+
+    height: 43px;
+
+    border: 1px solid #383838;
+
+    background: #101010;
+
+    color: #aaa;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 1.5px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
+}
+
+.close-code-button:hover {
+    border-color: #8d0000;
+
+    background: #210000;
+
+    color: #ffffff;
+}
+
+
+/* =========================================================
+   ACCÈS RAPIDE
+   ========================================================= */
+
+.quick-access {
+    width: min(1200px, 88%);
+
+    margin: 0 auto;
+
+    padding: 65px 0 80px;
+
+    border-top: 1px solid #222;
+}
+
+.quick-access > p {
+    margin-bottom: 8px;
+
+    color: #666;
+
+    font-size: 9px;
+    font-weight: 900;
+
+    letter-spacing: 2.5px;
+}
+
+.quick-access h2 {
+    margin-bottom: 25px;
+
+    color: #ffffff;
+
+    font-size: 25px;
+
+    letter-spacing: 2px;
+}
+
+.quick-links {
+    display: grid;
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 10px;
+}
+
+.quick-links a {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    min-height: 62px;
+
+    padding: 0 16px;
+
+    border: 1px solid #292929;
+
+    background: #0a0a0a;
+
+    color: #999;
+
+    font-size: 10px;
+    font-weight: 900;
+
+    letter-spacing: 0.8px;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        color 0.2s ease;
+}
+
+.quick-links a span {
+    color: #800000;
+
+    font-family: monospace;
+
+    font-size: 11px;
+}
+
+.quick-links a b {
+    margin-left: auto;
+
+    color: #555;
+
+    font-size: 17px;
+
+    font-weight: 400;
+}
+
+.quick-links a:hover {
+    border-color: #790000;
+
+    background: #130000;
+
+    color: #ffffff;
+}
+
+.quick-links a:hover span {
+    color: #d00000;
+}
+
+.quick-links a:hover b {
+    color: #d00000;
+}
+
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
+footer {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 30px;
+
+    min-height: 110px;
+
+    padding: 25px 8%;
+
+    border-top: 1px solid #222;
+
+    background: #070707;
+}
+
+.footer-logo {
+    color: #ffffff;
+
+    font-size: 20px;
+    font-weight: 900;
+
+    letter-spacing: 2px;
+}
+
+.footer-logo span {
+    color: #c00000;
+}
+
+.footer-info {
+    text-align: center;
+}
+
+.footer-info p {
+    margin: 4px 0;
+
+    color: #555;
+
+    font-size: 8px;
+    font-weight: 700;
+
+    letter-spacing: 1.5px;
+}
+
+.footer-right {
+    color: #333;
+
+    font-size: 24px;
+    font-weight: 900;
+
+    letter-spacing: 3px;
+}
+
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1000px) {
+
+    .topbar {
+        padding: 0 25px;
+    }
+
+    .topbar nav {
+        gap: 0;
+    }
+
+    .topbar nav a {
+        padding-left: 10px;
+        padding-right: 10px;
+    }
+
+    .topbar nav a.active::after {
+        left: 10px;
+        right: 10px;
+    }
+
+    .quick-links {
+        grid-template-columns:
+            repeat(2, 1fr);
+    }
+
+}
+
+
+@media (max-width: 750px) {
+
+    .topbar {
+        height: auto;
+
+        min-height: 70px;
+
+        flex-direction: column;
+
+        align-items: stretch;
+
+        padding: 18px 20px 0;
+    }
+
+    .logo {
+        margin-bottom: 15px;
+    }
+
+    .topbar nav {
+        width: 100%;
+
+        overflow-x: auto;
+    }
+
+    .topbar nav a {
+        flex-shrink: 0;
+
+        padding: 15px 10px;
+    }
+
+    .page-header {
+        padding: 65px 6% 55px;
+    }
+
+    .administration-content,
+    .quick-access {
+        width: 90%;
+    }
+
+    .administration-top {
+        flex-direction: column;
+
+        align-items: stretch;
+    }
+
+    .create-button {
+        width: 100%;
+    }
+
+    .member-card-info {
+        grid-template-columns: 1fr;
+    }
+
+    .member-actions {
+        flex-direction: column;
+    }
+
+    .member-actions button {
+        width: 100%;
+    }
+
+    .quick-links {
+        grid-template-columns: 1fr;
+    }
+
+    footer {
+        flex-direction: column;
+
+        text-align: center;
+
+        padding: 35px 20px;
+    }
+
+}
+
+
+@media (max-width: 500px) {
+
+    .page-header h1 {
+        font-size: 34px;
+
+        letter-spacing: 3px;
+    }
+
+    .modal {
+        padding: 12px;
+    }
+
+    .modal-box {
+        padding: 28px 20px;
+    }
+
+    .member-card-header {
+        flex-direction: column;
+    }
+
+    .member-status {
+        align-self: flex-start;
+    }
+
+    .form-actions {
+        flex-direction: column;
+    }
+
+}

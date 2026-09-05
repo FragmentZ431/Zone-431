@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZONE-431 | Zone Staff</title>
+
+    <link rel="stylesheet" href="style.css">
+
+
+    <!-- =====================================================
+         ZONE-431 — CSS ACCÈS STAFF
+         Aucun fichier CSS externe nécessaire
+         ===================================================== -->
+
+    <style>
+
+        .staff-access-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            height: 100%;
+            padding: 20px;
+            box-sizing: border-box;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition:
+                opacity 0.25s ease,
+                visibility 0.25s ease;
+        }
+
+        .staff-access-modal.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+
+        .staff-access-box {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            padding: 40px;
+            box-sizing: border-box;
+            background: linear-gradient(
+                145deg,
+                #171717,
+                #090909
+            );
+            border: 1px solid #3a0000;
+            box-shadow:
+                0 20px 70px rgba(0, 0, 0, 0.9),
+                0 0 35px rgba(130, 0, 0, 0.12);
+            transform:
+                translateY(15px)
+                scale(0.98);
+            transition:
+                transform 0.25s ease;
+        }
+
+        .staff-access-modal.active
+        .staff-access-box {
+            transform:
+                translateY(0)
+                scale(1);
+        }
+
+        .staff-access-box::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #a00000;
+            box-shadow:
+                0 0 12px rgba(160, 0, 0, 0.4);
+        }
+
+        .staff-access-label {
+            display: block;
+            margin-bottom: 8px;
+            color: #777;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 4px;
+        }
+
+        .staff-access-box h2 {
+            margin: 0;
+            color: #fff;
+            font-size: 27px;
+            font-weight: 700;
+            letter-spacing: 3px;
+        }
+
+        .staff-access-description {
+            margin: 18px 0 25px;
+            color: #777;
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .staff-access-input {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            box-sizing: border-box;
+            border: 1px solid #333;
+            border-radius: 0;
+            outline: none;
+            background: #0b0b0b;
+            color: #fff;
+            font-family: inherit;
+            font-size: 13px;
+            letter-spacing: 2px;
+            transition:
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .staff-access-input::placeholder {
+            color: #555;
+        }
+
+        .staff-access-input:focus {
+            border-color: #8d0000;
+            box-shadow:
+                0 0 15px rgba(140, 0, 0, 0.15);
+        }
+
+        .staff-access-message {
+            min-height: 18px;
+            margin-top: 10px;
+            color: #777;
+            font-size: 10px;
+            letter-spacing: 1px;
+        }
+
+        .staff-access-message.error {
+            color: #d00000;
+        }
+
+        .staff-access-message.success {
+            color: #5aaa5a;
+        }
+
+        .staff-access-submit {
+            display: block;
+            width: 100%;
+            margin-top: 18px;
+            padding: 13px;
+            box-sizing: border-box;
+            border: 1px solid #900000;
+            border-radius: 0;
+            outline: none;
+            background: #650000;
+            color: #fff;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            transition:
+                background 0.2s ease,
+                border-color 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .staff-access-submit:hover {
+            background: #a00000;
+            border-color: #c00000;
+            box-shadow:
+                0 0 20px rgba(160, 0, 0, 0.25);
+        }
+
+        .staff-access-close {
+            position: absolute;
+            top: 12px;
+            right: 15px;
+            width: 28px;
+            height: 28px;
+            padding: 0;
+            margin: 0;
+            border: none;
+            outline: none;
+            background: transparent;
+            color: #555;
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            font-size: 22px;
+            font-weight: 400;
+            line-height: 28px;
+            text-align: center;
+            transition:
+                color 0.2s ease,
+                transform 0.2s ease;
+        }
+
+        .staff-access-close:hover {
+            color: #d00000;
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 600px) {
+
+            .staff-access-box {
+                max-width: none;
+                padding: 32px 25px;
+            }
+
+            .staff-access-box h2 {
+                font-size: 23px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="home">
+
+
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <a href="accueil.html" class="logo">
+            ZONE<span>-431</span>
+        </a>
+
+        <nav>
+
+            <a href="accueil.html">
+                ACCUEIL
+            </a>
+
+            <a href="menu.html">
+                LA ZONE
+            </a>
+
+            <a href="département.html">
+                DÉPARTEMENTS
+            </a>
+
+            <a href="documents.html">
+                DOCUMENTS
+            </a>
+
+            <a href="contact.html">
+                CONTACT
+            </a>
+
+            <a
+                href="zone staff.html"
+                class="active"
+            >
+                ZONE STAFF
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         EN-TÊTE
+         ===================================================== -->
+
+    <section class="page-header">
+
+        <span>
+            SCP FOUNDATION // SITE-431
+        </span>
+
+        <h1>
+            ZONE STAFF
+        </h1>
+
+        <p>
+            Espace réservé à l'administration et au personnel
+            autorisé de la Zone-431.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCUEIL STAFF
+         ===================================================== -->
+
+    <section class="documents-access">
+
+        <p>
+            ADMINISTRATION
+        </p>
+
+        <h2>
+            CENTRE DE COMMANDEMENT
+        </h2>
+
+        <p>
+            Bienvenue dans l'espace réservé au staff de la Zone-431.
+            Sélectionnez une section afin d'accéder aux différents
+            outils administratifs.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         OUTILS STAFF
+         ===================================================== -->
+
+    <section class="documents-section">
+
+        <div class="section-header">
+
+            <span class="section-number">
+                01
+            </span>
+
+            <div>
+
+                <p>
+                    OUTILS ADMINISTRATIFS
+                </p>
+
+                <h2>
+                    GESTION DE LA ZONE
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="quick-links">
+
+
+            <!-- ROSTERS -->
+
+            <a href="roster.html">
+
+                <span>
+                    01
+                </span>
+
+                <div>
+
+                    <strong>
+                        ROSTERS
+                    </strong>
+
+                    <small>
+                        Gestion des membres et effectifs
+                    </small>
+
+                </div>
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <!-- SANCTIONS -->
+
+            <a href="sanction.html">
+
+                <span>
+                    02
+                </span>
+
+                <div>
+
+                    <strong>
+                        SANCTIONS
+                    </strong>
+
+                    <small>
+                        Gestion des sanctions et avertissements
+                    </small>
+
+                </div>
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <!-- RAPPORTS -->
+
+            <a href="Events.html">
+
+                <span>
+                    03
+                </span>
+
+                <div>
+
+                    <strong>
+                        RAPPORTS D'ÉVÈNEMENTS
+                    </strong>
+
+                    <small>
+                        Consulter et gérer les rapports RP
+                    </small>
+
+                </div>
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <!-- =================================================
+                 ADMINISTRATION
+                 Visible uniquement pour ADMINISTRATEUR
+                 ================================================= -->
+
+            <a
+                href="administration.html"
+                id="administrationLink"
+                style="display: none;"
+            >
+
+                <span>
+                    04
+                </span>
+
+                <div>
+
+                    <strong>
+                        ADMINISTRATION
+                    </strong>
+
+                    <small>
+                        Gestion générale de la Zone-431
+                    </small>
+
+                </div>
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         INFORMATIONS STAFF
+         ===================================================== -->
+
+    <section class="documents-section">
+
+        <div class="section-header">
+
+            <span class="section-number">
+                02
+            </span>
+
+            <div>
+
+                <p>
+                    SYSTÈME ZONE-431
+                </p>
+
+                <h2>
+                    INFORMATIONS
+                </h2>
+
+            </div>
+
+        </div>
+
+
+        <div class="rules-list">
+
+
+            <article class="rule-card">
+
+                <span class="rule-number">
+                    01
+                </span>
+
+                <div class="rule-content">
+
+                    <span class="rule-code">
+                        ACCÈS RESTREINT
+                    </span>
+
+                    <h3>
+                        Zone réservée au staff
+                    </h3>
+
+                    <p>
+                        Les informations présentes dans cette section
+                        sont réservées aux membres autorisés de
+                        l'administration et du staff de la Zone-431.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+            <article class="rule-card">
+
+                <span class="rule-number">
+                    02
+                </span>
+
+                <div class="rule-content">
+
+                    <span class="rule-code">
+                        CONFIDENTIALITÉ
+                    </span>
+
+                    <h3>
+                        Informations confidentielles
+                    </h3>
+
+                    <p>
+                        Les informations administratives, les sanctions,
+                        les rosters et les rapports internes ne doivent
+                        pas être communiqués à des personnes non autorisées.
+                    </p>
+
+                </div>
+
+            </article>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCÈS RAPIDE
+         ===================================================== -->
+
+    <section class="quick-access">
+
+        <p>
+            PORTAIL ZONE-431
+        </p>
+
+        <h2>
+            ACCÈS RAPIDE
+        </h2>
+
+
+        <div class="quick-links">
+
+
+            <a href="menu.html">
+
+                <span>
+                    01
+                </span>
+
+                LA ZONE
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <a href="département.html">
+
+                <span>
+                    02
+                </span>
+
+                DÉPARTEMENTS
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <a href="documents.html">
+
+                <span>
+                    03
+                </span>
+
+                DOCUMENTS
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <a href="contact.html">
+
+                <span>
+                    04
+                </span>
+
+                CONTACT
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+            <a
+                href="zone staff.html"
+                class="active"
+            >
+
+                <span>
+                    05
+                </span>
+
+                ZONE STAFF
+
+                <b>
+                    →
+                </b>
+
+            </a>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            ZONE<span>-431</span>
+        </div>
+
+        <div class="footer-info">
+
+            <p>
+                SCP FOUNDATION // SITE-431
+            </p>
+
+            <p>
+                DOCUMENT CLASSIFIÉ — ACCÈS RESTREINT
+            </p>
+
+        </div>
+
+        <div class="footer-right">
+            431
+        </div>
+
+    </footer>
+
+
+</div>
+
+
+<!-- =========================================================
+     SUPABASE
+     ========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<!-- =========================================================
+     SYSTÈME D'ACCÈS STAFF
+     ========================================================= -->
+
+<script src="staff-access.js"></script>
+
+
+<!-- =========================================================
+     AFFICHAGE ADMINISTRATION
+     ========================================================= -->
+
+<script>
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        function () {
+
+            const role =
+                sessionStorage.getItem(
+                    "zone431_role"
+                );
+
+            const administrationLink =
+                document.getElementById(
+                    "administrationLink"
+                );
+
+            if (
+                role === "ADMINISTRATEUR" &&
+                administrationLink
+            ) {
+
+                administrationLink.style.display =
+                    "flex";
+
+            }
+
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>

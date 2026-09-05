@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>ZONE-431 | Rosters</title>
+
+    <link rel="stylesheet" href="roster.css">
+
+</head>
+
+<body>
+
+<div class="roster-page">
+
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <a href="accueil.html" class="logo">
+            ZONE<span>-431</span>
+        </a>
+
+        <nav>
+
+            <a href="accueil.html">
+                ACCUEIL
+            </a>
+
+            <a href="menu.html">
+                LA ZONE
+            </a>
+
+            <a href="département.html">
+                DÉPARTEMENTS
+            </a>
+
+            <a href="documents.html">
+                DOCUMENTS
+            </a>
+
+            <a href="contact.html">
+                CONTACT
+            </a>
+
+            <a href="zone staff.html" class="active">
+                ZONE STAFF
+            </a>
+
+        </nav>
+
+    </header>
+
+
+    <!-- =====================================================
+         EN-TÊTE
+         ===================================================== -->
+
+    <section class="page-header">
+
+        <span>
+            SCP FOUNDATION // SITE-431
+        </span>
+
+        <h1>
+            ROSTERS
+        </h1>
+
+        <p>
+            Gestion et consultation des effectifs de la Zone-431.
+        </p>
+
+    </section>
+
+
+    <!-- =====================================================
+         CONTENU
+         ===================================================== -->
+
+    <main id="rosterContent" class="roster-content">
+
+        <div class="roster-top">
+
+            <div>
+
+                <span class="section-label">
+                    ADMINISTRATION ZONE-431
+                </span>
+
+                <h2>
+                    EFFECTIFS
+                </h2>
+
+                <p id="accessStatus">
+                    VÉRIFICATION DE L'ACCÈS...
+                </p>
+
+            </div>
+
+
+            <button
+                id="createRosterButton"
+                class="create-button hidden"
+                type="button"
+                onclick="openCreateRoster()">
+
+                + CRÉER UN ROSTER
+
+            </button>
+
+        </div>
+
+
+        <!-- =================================================
+             RECHERCHE
+             ================================================= -->
+
+        <div class="search-box">
+
+            <span>
+                🔎
+            </span>
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Rechercher un roster, un département ou un membre..."
+                autocomplete="off"
+                oninput="searchRosters()">
+
+        </div>
+
+
+        <!-- =================================================
+             LISTE
+             ================================================= -->
+
+        <div
+            id="rostersList"
+            class="rosters-list">
+
+            <div class="loading">
+                VÉRIFICATION DE L'ACCÈS...
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================================
+         MODAL ROSTER
+         ===================================================== -->
+
+    <div
+        id="rosterModal"
+        class="modal hidden">
+
+        <div
+            class="modal-background"
+            onclick="closeRosterModal()">
+        </div>
+
+
+        <div class="modal-box large-modal">
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeRosterModal()">
+
+                ×
+
+            </button>
+
+
+            <span
+                id="rosterModalLabel"
+                class="modal-label">
+
+                ADMINISTRATION
+
+            </span>
+
+
+            <h2 id="rosterModalTitle">
+                CRÉER UN ROSTER
+            </h2>
+
+
+            <form
+                id="rosterForm"
+                onsubmit="saveRoster(event)">
+
+
+                <input
+                    type="hidden"
+                    id="editingRosterId">
+
+
+                <label for="rosterName">
+                    NOM DU ROSTER
+                </label>
+
+                <input
+                    type="text"
+                    id="rosterName"
+                    placeholder="Ex : D.SE — Sécurité"
+                    required>
+
+
+                <label for="rosterDepartment">
+                    DÉPARTEMENT
+                </label>
+
+                <input
+                    type="text"
+                    id="rosterDepartment"
+                    placeholder="Ex : D.SE"
+                    required>
+
+
+                <label for="rosterLeader">
+                    RESPONSABLE
+                </label>
+
+                <input
+                    type="text"
+                    id="rosterLeader"
+                    placeholder="Pseudo IG du responsable">
+
+
+                <div class="members-header">
+
+                    <div>
+
+                        <span class="modal-label">
+                            EFFECTIF
+                        </span>
+
+                        <h3>
+                            MEMBRES DU ROSTER
+                        </h3>
+
+                    </div>
+
+                </div>
+
+
+                <div class="member-inputs">
+
+                    <input
+                        type="text"
+                        id="memberIG"
+                        placeholder="Pseudo IG">
+
+                    <input
+                        type="text"
+                        id="memberDiscord"
+                        placeholder="Pseudo Discord">
+
+
+                    <button
+                        type="button"
+                        class="add-member-button"
+                        onclick="addMember()">
+
+                        + AJOUTER
+
+                    </button>
+
+                </div>
+
+
+                <div class="member-search">
+
+                    <span>
+                        🔎
+                    </span>
+
+                    <input
+                        type="text"
+                        id="memberSearchInput"
+                        placeholder="Rechercher un membre..."
+                        oninput="filterMembers()">
+
+                </div>
+
+
+                <div
+                    id="membersList"
+                    class="members-list">
+
+                    <p class="empty-members">
+                        Aucun membre ajouté.
+                    </p>
+
+                </div>
+
+
+                <label for="rosterDescription">
+                    DESCRIPTION
+                </label>
+
+                <textarea
+                    id="rosterDescription"
+                    placeholder="Description du roster..."></textarea>
+
+
+                <label for="rosterStatus">
+                    STATUT
+                </label>
+
+                <select id="rosterStatus">
+
+                    <option value="ACTIF">
+                        ACTIF
+                    </option>
+
+                    <option value="INACTIF">
+                        INACTIF
+                    </option>
+
+                </select>
+
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="closeRosterModal()">
+
+                        ANNULER
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-button">
+
+                        ENREGISTRER
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <!-- =====================================================
+         ACCÈS RAPIDE
+         ===================================================== -->
+
+    <section class="quick-access">
+
+        <p>
+            PORTAIL ZONE-431
+        </p>
+
+        <h2>
+            ACCÈS RAPIDE
+        </h2>
+
+
+        <div class="quick-links">
+
+            <a href="menu.html">
+                <span>01</span>
+                LA ZONE
+                <b>→</b>
+            </a>
+
+            <a href="département.html">
+                <span>02</span>
+                DÉPARTEMENTS
+                <b>→</b>
+            </a>
+
+            <a href="documents.html">
+                <span>03</span>
+                DOCUMENTS
+                <b>→</b>
+            </a>
+
+            <a href="contact.html">
+                <span>04</span>
+                CONTACT
+                <b>→</b>
+            </a>
+
+            <a href="zone staff.html">
+                <span>05</span>
+                ZONE STAFF
+                <b>→</b>
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+        <div class="footer-logo">
+            ZONE<span>-431</span>
+        </div>
+
+        <div class="footer-info">
+
+            <p>
+                SCP FOUNDATION // SITE-431
+            </p>
+
+            <p>
+                DOCUMENT CLASSIFIÉ — ACCÈS RESTREINT
+            </p>
+
+        </div>
+
+        <div class="footer-right">
+            431
+        </div>
+
+    </footer>
+
+</div>
+
+
+<!-- =========================================================
+     SUPABASE
+     ========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURATION SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    'https://pvtrlplsplyigvxiykce.supabase.co';
+
+const SUPABASE_KEY =
+    'sb_publishable_iwAj_zFrWEsMcqUKNINwJw_Po3QAwDG';
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let currentRole = null;
+
+let allRosters = [];
+
+let currentMembers = [];
+
+
+/* =========================================================
+   VÉRIFICATION SESSION + RÔLE
+   ========================================================= */
+
+async function checkStaffRole() {
+
+    /*
+     * IMPORTANT :
+     * On vérifie maintenant la vraie session Supabase.
+     * sessionStorage seul n'est pas suffisant pour RLS.
+     */
+
+    const {
+        data: {
+            session
+        },
+        error
+    } = await supabaseClient.auth.getSession();
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur récupération session :',
+            error
+        );
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    /*
+     * Aucune session Supabase =
+     * auth.uid() sera null =
+     * RLS refusera les écritures.
+     */
+
+    if (!session) {
+
+        console.warn(
+            'ZONE-431 — Aucune session Supabase active.'
+        );
+
+        sessionStorage.removeItem(
+            'zone431_role'
+        );
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    console.log(
+        'ZONE-431 — Session Supabase active :',
+        session.user.id
+    );
+
+
+    /*
+     * Récupération du rôle affiché.
+     */
+
+    const role =
+        sessionStorage.getItem(
+            'zone431_role'
+        );
+
+
+    const allowedRoles = [
+
+        'MODÉRATION',
+        'ANIMATION',
+        'MANAGER MOD',
+        'MANAGER ANIM',
+        'ADMINISTRATEUR'
+
+    ];
+
+
+    if (
+        !role ||
+        !allowedRoles.includes(role)
+    ) {
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    /*
+     * Vérification supplémentaire côté serveur.
+     *
+     * On ne fait PAS confiance uniquement au sessionStorage.
+     */
+
+    const {
+        data: serverRole,
+        error: roleError
+    } = await supabaseClient
+        .rpc('current_staff_role');
+
+
+    if (roleError) {
+
+        console.error(
+            'ZONE-431 — Impossible de vérifier le rôle serveur :',
+            roleError
+        );
+
+        alert(
+            'Impossible de vérifier votre session staff.'
+        );
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    if (!serverRole) {
+
+        console.warn(
+            'ZONE-431 — Aucun rôle associé à cette session Supabase.'
+        );
+
+        sessionStorage.removeItem(
+            'zone431_role'
+        );
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    /*
+     * Le rôle serveur devient la référence.
+     */
+
+    currentRole =
+        serverRole;
+
+
+    /*
+     * On synchronise le sessionStorage.
+     */
+
+    sessionStorage.setItem(
+        'zone431_role',
+        serverRole
+    );
+
+
+    console.log(
+        'ZONE-431 — Rôle serveur :',
+        currentRole
+    );
+
+
+    return true;
+
+}
+
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    async function() {
+
+        const accessGranted =
+            await checkStaffRole();
+
+
+        if (!accessGranted) {
+            return;
+        }
+
+
+        const status =
+            document.getElementById(
+                'accessStatus'
+            );
+
+
+        if (
+            currentRole ===
+            'ADMINISTRATEUR'
+        ) {
+
+            status.textContent =
+                'ACCÈS ADMINISTRATEUR — GESTION AUTORISÉE';
+
+
+            document
+                .getElementById(
+                    'createRosterButton'
+                )
+                .classList.remove(
+                    'hidden'
+                );
+
+        }
+
+        else {
+
+            status.textContent =
+                'ACCÈS ' +
+                currentRole +
+                ' — CONSULTATION';
+
+        }
+
+
+        await loadRosters();
+
+    }
+);
+
+
+/* =========================================================
+   CHARGER LES ROSTERS
+   ========================================================= */
+
+async function loadRosters() {
+
+    const container =
+        document.getElementById(
+            'rostersList'
+        );
+
+
+    container.innerHTML =
+        '<div class="loading">CHARGEMENT DES ROSTERS...</div>';
+
+
+    const {
+        data,
+        error
+    } = await supabaseClient
+        .from('roster')
+        .select('*')
+        .order(
+            'created_at',
+            {
+                ascending: false
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur roster :',
+            error
+        );
+
+
+        container.innerHTML =
+            '<div class="error-box">Impossible de charger les rosters.</div>';
+
+        return;
+
+    }
+
+
+    allRosters =
+        data || [];
+
+
+    await displayRosters(
+        allRosters
+    );
+
+}
+
+
+/* =========================================================
+   AFFICHER LES ROSTERS
+   ========================================================= */
+
+async function displayRosters(rosters) {
+
+    const container =
+        document.getElementById(
+            'rostersList'
+        );
+
+
+    container.innerHTML = '';
+
+
+    if (!rosters.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-box">
+
+                <h3>
+                    AUCUN ROSTER
+                </h3>
+
+                <p>
+                    Aucun roster n'est actuellement enregistré.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+
+    }
+
+
+    for (
+        const roster of rosters
+    ) {
+
+        const {
+            data: members,
+            error
+        } = await supabaseClient
+            .from('roster_members')
+            .select('*')
+            .eq(
+                'roster_id',
+                roster.id
+            )
+            .order(
+                'created_at',
+                {
+                    ascending: true
+                }
+            );
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur membres :',
+                error
+            );
+
+        }
+
+
+        let membersHTML = '';
+
+
+        if (
+            members &&
+            members.length
+        ) {
+
+            membersHTML =
+                members
+                    .map(
+                        member => `
+
+                            <div class="member-row">
+
+                                <div class="member-identity">
+
+                                    <strong>
+                                        ${escapeHTML(
+                                            member.pseudo_ig
+                                        )}
+                                    </strong>
+
+                                    <span>
+                                        ${escapeHTML(
+                                            member.pseudo_discord
+                                        )}
+                                    </span>
+
+                                </div>
+
+                            </div>
+
+                        `
+                    )
+                    .join('');
+
+        }
+
+        else {
+
+            membersHTML = `
+
+                <p class="no-members">
+                    Aucun membre enregistré.
+                </p>
+
+            `;
+
+        }
+
+
+        const adminButtons =
+            currentRole ===
+            'ADMINISTRATEUR'
+                ? `
+
+                    <div class="roster-actions">
+
+                        <button
+                            type="button"
+                            onclick="editRoster(${roster.id})">
+
+                            MODIFIER
+
+                        </button>
+
+
+                        <button
+                            type="button"
+                            class="delete-action"
+                            onclick="deleteRoster(${roster.id})">
+
+                            SUPPRIMER
+
+                        </button>
+
+                    </div>
+
+                `
+                : '';
+
+
+        const card =
+            document.createElement(
+                'article'
+            );
+
+
+        card.className =
+            'roster-card';
+
+
+        card.innerHTML = `
+
+            <div class="roster-card-header">
+
+                <div>
+
+                    <span class="roster-department">
+
+                        ${escapeHTML(
+                            roster.departement || ''
+                        )}
+
+                    </span>
+
+
+                    <h3>
+
+                        ${escapeHTML(
+                            roster.nom ||
+                            'ROSTER SANS NOM'
+                        )}
+
+                    </h3>
+
+                </div>
+
+
+                <span class="roster-status">
+
+                    ${escapeHTML(
+                        roster.statut ||
+                        'ACTIF'
+                    )}
+
+                </span>
+
+            </div>
+
+
+            <div class="roster-info">
+
+                <p>
+
+                    <strong>
+                        RESPONSABLE :
+                    </strong>
+
+                    ${escapeHTML(
+                        roster.responsable ||
+                        'Non renseigné'
+                    )}
+
+                </p>
+
+
+                <p>
+
+                    ${escapeHTML(
+                        roster.description ||
+                        ''
+                    )}
+
+                </p>
+
+            </div>
+
+
+            <div class="members-container">
+
+                <div class="members-title">
+                    EFFECTIF
+                </div>
+
+                ${membersHTML}
+
+            </div>
+
+
+            ${adminButtons}
+
+        `;
+
+
+        container.appendChild(
+            card
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   RECHERCHE
+   ========================================================= */
+
+function searchRosters() {
+
+    const query =
+        document
+            .getElementById(
+                'searchInput'
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    if (!query) {
+
+        displayRosters(
+            allRosters
+        );
+
+        return;
+
+    }
+
+
+    const filtered =
+        allRosters.filter(
+            roster => {
+
+                return (
+
+                    (
+                        roster.nom ||
+                        ''
+                    )
+                    .toLowerCase()
+                    .includes(query)
+
+                    ||
+
+                    (
+                        roster.departement ||
+                        ''
+                    )
+                    .toLowerCase()
+                    .includes(query)
+
+                    ||
+
+                    (
+                        roster.responsable ||
+                        ''
+                    )
+                    .toLowerCase()
+                    .includes(query)
+
+                );
+
+            }
+        );
+
+
+    displayRosters(
+        filtered
+    );
+
+}
+
+
+/* =========================================================
+   CRÉATION
+   ========================================================= */
+
+function openCreateRoster() {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+    currentMembers = [];
+
+
+    document
+        .getElementById(
+            'rosterForm'
+        )
+        .reset();
+
+
+    document
+        .getElementById(
+            'editingRosterId'
+        )
+        .value = '';
+
+
+    document
+        .getElementById(
+            'rosterModalTitle'
+        )
+        .textContent =
+            'CRÉER UN ROSTER';
+
+
+    updateMembersList();
+
+
+    document
+        .getElementById(
+            'rosterModal'
+        )
+        .classList.remove(
+            'hidden'
+        );
+
+}
+
+
+/* =========================================================
+   FERMER MODAL
+   ========================================================= */
+
+function closeRosterModal() {
+
+    document
+        .getElementById(
+            'rosterModal'
+        )
+        .classList.add(
+            'hidden'
+        );
+
+}
+
+
+/* =========================================================
+   AJOUTER MEMBRE
+   ========================================================= */
+
+function addMember() {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+    const ig =
+        document
+            .getElementById(
+                'memberIG'
+            )
+            .value
+            .trim();
+
+
+    const discord =
+        document
+            .getElementById(
+                'memberDiscord'
+            )
+            .value
+            .trim();
+
+
+    if (!ig || !discord) {
+
+        alert(
+            'Veuillez renseigner le pseudo IG et le pseudo Discord.'
+        );
+
+        return;
+
+    }
+
+
+    currentMembers.push({
+
+        pseudo_ig:
+            ig,
+
+        pseudo_discord:
+            discord
+
+    });
+
+
+    document
+        .getElementById(
+            'memberIG'
+        )
+        .value = '';
+
+
+    document
+        .getElementById(
+            'memberDiscord'
+        )
+        .value = '';
+
+
+    updateMembersList();
+
+}
+
+
+/* =========================================================
+   AFFICHER MEMBRES
+   ========================================================= */
+
+function updateMembersList() {
+
+    const container =
+        document.getElementById(
+            'membersList'
+        );
+
+
+    if (!currentMembers.length) {
+
+        container.innerHTML = `
+
+            <p class="empty-members">
+                Aucun membre ajouté.
+            </p>
+
+        `;
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        currentMembers
+            .map(
+                (member, index) => `
+
+                    <div
+                        class="editing-member"
+                        data-member-index="${index}">
+
+                        <div>
+
+                            <strong>
+                                ${escapeHTML(
+                                    member.pseudo_ig
+                                )}
+                            </strong>
+
+                            <span>
+                                ${escapeHTML(
+                                    member.pseudo_discord
+                                )}
+                            </span>
+
+                        </div>
+
+
+                        <button
+                            type="button"
+                            onclick="removeMember(${index})">
+
+                            ×
+
+                        </button>
+
+                    </div>
+
+                `
+            )
+            .join('');
+
+}
+
+
+/* =========================================================
+   SUPPRIMER MEMBRE
+   ========================================================= */
+
+function removeMember(index) {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+    currentMembers.splice(
+        index,
+        1
+    );
+
+
+    updateMembersList();
+
+}
+
+
+/* =========================================================
+   RECHERCHE MEMBRES
+   ========================================================= */
+
+function filterMembers() {
+
+    const query =
+        document
+            .getElementById(
+                'memberSearchInput'
+            )
+            .value
+            .toLowerCase()
+            .trim();
+
+
+    const elements =
+        document.querySelectorAll(
+            '.editing-member'
+        );
+
+
+    elements.forEach(
+        element => {
+
+            const index =
+                Number(
+                    element.dataset.memberIndex
+                );
+
+
+            const member =
+                currentMembers[index];
+
+
+            if (!member) {
+                return;
+            }
+
+
+            const text =
+                (
+                    member.pseudo_ig
+                    + ' '
+                    + member.pseudo_discord
+                )
+                .toLowerCase();
+
+
+            element.style.display =
+                text.includes(query)
+                    ? ''
+                    : 'none';
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ENREGISTRER ROSTER
+   ========================================================= */
+
+async function saveRoster(event) {
+
+    event.preventDefault();
+
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        alert(
+            'ACCÈS REFUSÉ — ADMINISTRATEUR UNIQUEMENT.'
+        );
+
+        return;
+
+    }
+
+
+    /*
+     * NOUVELLE VÉRIFICATION :
+     * on vérifie que la session Supabase existe
+     * juste avant l'écriture.
+     */
+
+    const {
+        data: {
+            session
+        }
+    } = await supabaseClient.auth.getSession();
+
+
+    if (!session) {
+
+        alert(
+            'SESSION STAFF EXPIRÉE — veuillez vous reconnecter.'
+        );
+
+        window.location.href =
+            'zone staff.html';
+
+        return;
+
+    }
+
+
+    console.log(
+        'ZONE-431 — Enregistrement avec auth.uid :',
+        session.user.id
+    );
+
+
+    const id =
+        document
+            .getElementById(
+                'editingRosterId'
+            )
+            .value;
+
+
+    const rosterData = {
+
+        nom:
+            document
+                .getElementById(
+                    'rosterName'
+                )
+                .value
+                .trim(),
+
+
+        departement:
+            document
+                .getElementById(
+                    'rosterDepartment'
+                )
+                .value
+                .trim(),
+
+
+        responsable:
+            document
+                .getElementById(
+                    'rosterLeader'
+                )
+                .value
+                .trim(),
+
+
+        description:
+            document
+                .getElementById(
+                    'rosterDescription'
+                )
+                .value
+                .trim(),
+
+
+        statut:
+            document
+                .getElementById(
+                    'rosterStatus'
+                )
+                .value
+
+    };
+
+
+    let rosterId = id;
+
+
+    /* =====================================================
+       MODIFICATION
+       ===================================================== */
+
+    if (id) {
+
+        const {
+            error
+        } = await supabaseClient
+            .from('roster')
+            .update(
+                rosterData
+            )
+            .eq(
+                'id',
+                id
+            );
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur modification roster :',
+                error
+            );
+
+            alert(
+                'Erreur lors de la modification du roster.'
+            );
+
+            return;
+
+        }
+
+
+        const {
+            error: membersDeleteError
+        } = await supabaseClient
+            .from('roster_members')
+            .delete()
+            .eq(
+                'roster_id',
+                id
+            );
+
+
+        if (membersDeleteError) {
+
+            console.error(
+                'ZONE-431 — Erreur suppression anciens membres :',
+                membersDeleteError
+            );
+
+            alert(
+                'Le roster a été modifié mais les anciens membres n’ont pas pu être supprimés.'
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CRÉATION
+       ===================================================== */
+
+    else {
+
+        const {
+            data,
+            error
+        } = await supabaseClient
+            .from('roster')
+            .insert(
+                rosterData
+            )
+            .select()
+            .single();
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur création roster :',
+                error
+            );
+
+            alert(
+                'Erreur lors de la création du roster.'
+            );
+
+            return;
+
+        }
+
+
+        rosterId =
+            data.id;
+
+    }
+
+
+    /* =====================================================
+       MEMBRES
+       ===================================================== */
+
+    if (
+        currentMembers.length
+    ) {
+
+        const members =
+            currentMembers.map(
+                member => ({
+
+                    roster_id:
+                        rosterId,
+
+                    pseudo_ig:
+                        member.pseudo_ig,
+
+                    pseudo_discord:
+                        member.pseudo_discord
+
+                })
+            );
+
+
+        const {
+            error
+        } = await supabaseClient
+            .from('roster_members')
+            .insert(
+                members
+            );
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur membres :',
+                error
+            );
+
+            alert(
+                'Le roster a été enregistré mais une erreur est survenue avec les membres.'
+            );
+
+            return;
+
+        }
+
+    }
+
+
+    closeRosterModal();
+
+
+    await loadRosters();
+
+}
+
+
+/* =========================================================
+   MODIFIER ROSTER
+   ========================================================= */
+
+async function editRoster(id) {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+    const roster =
+        allRosters.find(
+            item =>
+                item.id === id
+        );
+
+
+    if (!roster) {
+        return;
+    }
+
+
+    const {
+        data: members,
+        error
+    } = await supabaseClient
+        .from('roster_members')
+        .select('*')
+        .eq(
+            'roster_id',
+            id
+        )
+        .order(
+            'created_at',
+            {
+                ascending: true
+            }
+        );
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur chargement membres :',
+            error
+        );
+
+    }
+
+
+    currentMembers =
+        (
+            members ||
+            []
+        )
+        .map(
+            member => ({
+
+                pseudo_ig:
+                    member.pseudo_ig,
+
+                pseudo_discord:
+                    member.pseudo_discord
+
+            })
+        );
+
+
+    document
+        .getElementById(
+            'editingRosterId'
+        )
+        .value = id;
+
+
+    document
+        .getElementById(
+            'rosterName'
+        )
+        .value =
+            roster.nom || '';
+
+
+    document
+        .getElementById(
+            'rosterDepartment'
+        )
+        .value =
+            roster.departement || '';
+
+
+    document
+        .getElementById(
+            'rosterLeader'
+        )
+        .value =
+            roster.responsable || '';
+
+
+    document
+        .getElementById(
+            'rosterDescription'
+        )
+        .value =
+            roster.description || '';
+
+
+    document
+        .getElementById(
+            'rosterStatus'
+        )
+        .value =
+            roster.statut ||
+            'ACTIF';
+
+
+    document
+        .getElementById(
+            'rosterModalTitle'
+        )
+        .textContent =
+            'MODIFIER LE ROSTER';
+
+
+    updateMembersList();
+
+
+    document
+        .getElementById(
+            'rosterModal'
+        )
+        .classList.remove(
+            'hidden'
+        );
+
+}
+
+
+/* =========================================================
+   SUPPRIMER ROSTER
+   ========================================================= */
+
+async function deleteRoster(id) {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+    const confirmation =
+        confirm(
+            'Voulez-vous vraiment supprimer ce roster ?'
+        );
+
+
+    if (!confirmation) {
+        return;
+    }
+
+
+    const {
+        error
+    } = await supabaseClient
+        .from('roster')
+        .delete()
+        .eq(
+            'id',
+            id
+        );
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur suppression roster :',
+            error
+        );
+
+        alert(
+            'Impossible de supprimer le roster.'
+        );
+
+        return;
+
+    }
+
+
+    await loadRosters();
+
+}
+
+
+/* =========================================================
+   PROTECTION HTML
+   ========================================================= */
+
+function escapeHTML(value) {
+
+    return String(
+        value ?? ''
+    )
+    .replace(
+        /&/g,
+        '&amp;'
+    )
+    .replace(
+        /</g,
+        '&lt;'
+    )
+    .replace(
+        />/g,
+        '&gt;'
+    )
+    .replace(
+        /"/g,
+        '&quot;'
+    )
+    .replace(
+        /'/g,
+        '&#039;'
+    );
+
+}
+
+</script>
+
+</body>
+
+</html>

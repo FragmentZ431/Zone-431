@@ -1,0 +1,313 @@
+/* =========================================================
+   ZONE-431 — FENÊTRE D'ACCÈS STAFF
+   ========================================================= */
+
+/* =========================================================
+   FOND
+   ========================================================= */
+
+.staff-access-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 100%;
+    height: 100%;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(8px);
+
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+/* =========================================================
+   FENÊTRE ACTIVE
+   ========================================================= */
+
+.staff-access-modal.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+/* =========================================================
+   BOÎTE
+   ========================================================= */
+
+.staff-access-box {
+    position: relative;
+
+    width: 100%;
+    max-width: 440px;
+
+    padding: 40px;
+    box-sizing: border-box;
+
+    background: linear-gradient(
+        145deg,
+        #171717,
+        #090909
+    );
+
+    border: 1px solid #3a0000;
+
+    box-shadow:
+        0 20px 70px rgba(0, 0, 0, 0.9),
+        0 0 35px rgba(130, 0, 0, 0.12);
+
+    transform: translateY(15px) scale(0.98);
+
+    transition: transform 0.25s ease;
+}
+
+/* =========================================================
+   ANIMATION
+   ========================================================= */
+
+.staff-access-modal.active .staff-access-box {
+    transform: translateY(0) scale(1);
+}
+
+/* =========================================================
+   LIGNE ROUGE
+   ========================================================= */
+
+.staff-access-box::before {
+    content: "";
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 100%;
+    height: 2px;
+
+    background: #a00000;
+
+    box-shadow:
+        0 0 12px rgba(160, 0, 0, 0.4);
+}
+
+/* =========================================================
+   PETIT TITRE
+   ========================================================= */
+
+.staff-access-label {
+    margin-bottom: 8px;
+
+    color: #777;
+
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 4px;
+}
+
+/* =========================================================
+   TITRE
+   ========================================================= */
+
+.staff-access-box h2 {
+    margin: 0;
+
+    color: #fff;
+
+    font-size: 27px;
+    font-weight: 700;
+
+    letter-spacing: 3px;
+}
+
+/* =========================================================
+   DESCRIPTION
+   ========================================================= */
+
+.staff-access-description {
+    margin: 18px 0 25px;
+
+    color: #777;
+
+    font-size: 12px;
+    line-height: 1.7;
+}
+
+/* =========================================================
+   CHAMP
+   ========================================================= */
+
+.staff-access-input {
+    display: block;
+
+    width: 100%;
+
+    padding: 14px;
+    box-sizing: border-box;
+
+    border: 1px solid #333;
+    border-radius: 0;
+
+    outline: none;
+
+    background: #0b0b0b;
+    color: #fff;
+
+    font-family: inherit;
+    font-size: 13px;
+
+    letter-spacing: 2px;
+
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.staff-access-input::placeholder {
+    color: #555;
+}
+
+.staff-access-input:focus {
+    border-color: #8d0000;
+
+    box-shadow:
+        0 0 15px rgba(140, 0, 0, 0.15);
+}
+
+/* =========================================================
+   MESSAGE
+   ========================================================= */
+
+.staff-access-message {
+    min-height: 18px;
+
+    margin-top: 10px;
+
+    color: #777;
+
+    font-size: 10px;
+    letter-spacing: 1px;
+}
+
+.staff-access-message.error {
+    color: #d00000;
+}
+
+.staff-access-message.success {
+    color: #5aaa5a;
+}
+
+/* =========================================================
+   BOUTON ACCÉDER
+   ========================================================= */
+
+.staff-access-submit {
+    display: block;
+
+    width: 100%;
+
+    margin-top: 18px;
+
+    padding: 13px;
+    box-sizing: border-box;
+
+    border: 1px solid #900000;
+    border-radius: 0;
+
+    outline: none;
+
+    background: #650000;
+    color: #fff;
+
+    cursor: pointer;
+
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: 700;
+
+    letter-spacing: 2px;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.staff-access-submit:hover {
+    background: #a00000;
+
+    border-color: #c00000;
+
+    box-shadow:
+        0 0 20px rgba(160, 0, 0, 0.25);
+}
+
+/* =========================================================
+   CROIX
+   ========================================================= */
+
+.staff-access-close {
+    position: absolute;
+
+    top: 12px;
+    right: 15px;
+
+    width: 28px;
+    height: 28px;
+
+    padding: 0;
+    margin: 0;
+
+    border: none;
+    outline: none;
+
+    background: transparent;
+    color: #555;
+
+    cursor: pointer;
+
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+    font-weight: 400;
+
+    line-height: 28px;
+    text-align: center;
+
+    transition:
+        color 0.2s ease,
+        transform 0.2s ease;
+}
+
+.staff-access-close:hover {
+    color: #d00000;
+
+    transform: scale(1.1);
+}
+
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 600px) {
+
+    .staff-access-box {
+        max-width: none;
+        padding: 32px 25px;
+    }
+
+    .staff-access-box h2 {
+        font-size: 23px;
+    }
+}

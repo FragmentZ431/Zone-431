@@ -1,0 +1,1930 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+    <title>ZONE-431 | Rapports d'événements</title>
+
+    <link
+        rel="stylesheet"
+        href="Events.css">
+
+</head>
+
+
+<body>
+
+<div class="events-page">
+
+
+    <!-- =====================================================
+         BARRE DE NAVIGATION
+         ===================================================== -->
+
+    <header class="topbar">
+
+        <a
+            href="accueil.html"
+            class="logo">
+
+            ZONE<span>-431</span>
+
+        </a>
+
+
+        <nav>
+
+            <a href="accueil.html">
+                ACCUEIL
+            </a>
+
+            <a href="menu.html">
+                LA ZONE
+            </a>
+
+            <a href="département.html">
+                DÉPARTEMENTS
+            </a>
+
+            <a href="documents.html">
+                DOCUMENTS
+            </a>
+
+            <a href="contact.html">
+                CONTACT
+            </a>
+
+            <a
+                href="zone staff.html"
+                class="active">
+
+                ZONE STAFF
+
+            </a>
+
+        </nav>
+
+    </header>
+
+
+
+    <!-- =====================================================
+         EN-TÊTE
+         ===================================================== -->
+
+    <section class="page-header">
+
+        <span>
+            SCP FOUNDATION // SITE-431
+        </span>
+
+
+        <h1>
+            RAPPORTS
+            <br>
+            D'ÉVÉNEMENTS
+        </h1>
+
+
+        <p>
+            Consultation et archivage des rapports relatifs
+            aux événements organisés au sein de la Zone-431.
+        </p>
+
+    </section>
+
+
+
+    <!-- =====================================================
+         CONTENU
+         ===================================================== -->
+
+    <main
+        id="eventsContent"
+        class="events-content hidden">
+
+
+        <div class="events-top">
+
+
+            <div>
+
+                <span class="section-label">
+                    ARCHIVES ZONE-431
+                </span>
+
+
+                <h2>
+                    RAPPORTS D'ÉVÉNEMENTS
+                </h2>
+
+
+                <p id="accessStatus">
+                    ACCÈS — CONSULTATION
+                </p>
+
+            </div>
+
+
+
+            <!-- ADMIN UNIQUEMENT -->
+
+            <button
+                id="createReportButton"
+                type="button"
+                class="create-button hidden"
+                onclick="openCreateReport()">
+
+                + NOUVEAU RAPPORT
+
+            </button>
+
+
+        </div>
+
+
+
+        <!-- =================================================
+             RECHERCHE
+             ================================================= -->
+
+        <div class="search-box">
+
+            <span>
+                🔎
+            </span>
+
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Rechercher un événement, un responsable, un participant..."
+                autocomplete="off"
+                oninput="searchReports()">
+
+        </div>
+
+
+
+        <!-- =================================================
+             LISTE
+             ================================================= -->
+
+        <div
+            id="reportsList"
+            class="reports-list">
+
+            <div class="loading">
+                CHARGEMENT DES RAPPORTS...
+            </div>
+
+        </div>
+
+
+    </main>
+
+
+
+    <!-- =====================================================
+         MODALE CRÉATION / MODIFICATION
+         ===================================================== -->
+
+    <div
+        id="reportModal"
+        class="modal hidden">
+
+
+        <div
+            class="modal-background"
+            onclick="closeReportModal()">
+        </div>
+
+
+        <div class="modal-box large-modal">
+
+
+            <button
+                type="button"
+                class="modal-close"
+                onclick="closeReportModal()">
+
+                ×
+
+            </button>
+
+
+            <span class="modal-label">
+                ADMINISTRATION // ÉVÉNEMENT
+            </span>
+
+
+            <h2 id="reportModalTitle">
+                NOUVEAU RAPPORT
+            </h2>
+
+
+
+            <!-- =================================================
+                 FORMULAIRE
+                 ================================================= -->
+
+            <form
+                id="eventReportForm"
+                onsubmit="saveReport(event)">
+
+
+                <input
+                    type="hidden"
+                    id="editingReportId">
+
+
+
+                <!-- NOM -->
+
+                <label for="eventName">
+                    NOM DE L'ÉVÉNEMENT
+                </label>
+
+
+                <input
+                    type="text"
+                    id="eventName"
+                    placeholder="Ex : Intrusion — Secteur S2"
+                    required>
+
+
+
+                <!-- DATE -->
+
+                <label>
+                    DATE DE L'ÉVÉNEMENT
+                </label>
+
+
+                <div class="date-inputs">
+
+                    <input
+                        type="number"
+                        id="eventDay"
+                        placeholder="JJ"
+                        min="1"
+                        max="31"
+                        inputmode="numeric"
+                        required>
+
+
+                    <span>/</span>
+
+
+                    <input
+                        type="number"
+                        id="eventMonth"
+                        placeholder="MM"
+                        min="1"
+                        max="12"
+                        inputmode="numeric"
+                        required>
+
+
+                    <span>/</span>
+
+
+                    <input
+                        type="number"
+                        id="eventYear"
+                        placeholder="AAAA"
+                        min="2020"
+                        max="2100"
+                        inputmode="numeric"
+                        required>
+
+                </div>
+
+
+
+                <!-- RESPONSABLE -->
+
+                <label for="eventLeader">
+                    RESPONSABLE
+                </label>
+
+
+                <input
+                    type="text"
+                    id="eventLeader"
+                    placeholder="Pseudo IG du responsable">
+
+
+
+                <!-- PARTICIPANTS -->
+
+                <label for="eventParticipants">
+                    NOMBRE DE PARTICIPANTS
+                </label>
+
+
+                <input
+                    type="number"
+                    id="eventParticipants"
+                    min="0"
+                    value="0"
+                    placeholder="0">
+
+
+
+                <!-- RÉSUMÉ -->
+
+                <label for="eventSummary">
+                    RÉSUMÉ
+                </label>
+
+
+                <textarea
+                    id="eventSummary"
+                    placeholder="Résumé général de l'événement..."
+                    required></textarea>
+
+
+
+                <!-- DÉROULEMENT -->
+
+                <label for="eventProgress">
+                    DÉROULEMENT
+                </label>
+
+
+                <textarea
+                    id="eventProgress"
+                    placeholder="Décrivez le déroulement de l'événement..."></textarea>
+
+
+
+                <!-- INCIDENTS -->
+
+                <label for="eventIncidents">
+                    INCIDENTS
+                </label>
+
+
+                <textarea
+                    id="eventIncidents"
+                    placeholder="Incidents, problèmes ou anomalies constatés..."></textarea>
+
+
+
+                <!-- COMMENTAIRES -->
+
+                <label for="eventComments">
+                    COMMENTAIRES
+                </label>
+
+
+                <textarea
+                    id="eventComments"
+                    placeholder="Informations complémentaires..."></textarea>
+
+
+
+                <!-- STATUT -->
+
+                <label for="eventStatus">
+                    STATUT
+                </label>
+
+
+                <select id="eventStatus">
+
+                    <option value="TERMINE">
+                        TERMINÉ
+                    </option>
+
+                    <option value="EN COURS">
+                        EN COURS
+                    </option>
+
+                    <option value="ANNULE">
+                        ANNULÉ
+                    </option>
+
+                    <option value="INCIDENT">
+                        INCIDENT
+                    </option>
+
+                </select>
+
+
+
+                <!-- ACTIONS -->
+
+                <div class="form-actions">
+
+                    <button
+                        type="button"
+                        class="cancel-button"
+                        onclick="closeReportModal()">
+
+                        ANNULER
+
+                    </button>
+
+
+                    <button
+                        type="submit"
+                        class="save-button">
+
+                        ENREGISTRER
+
+                    </button>
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =====================================================
+         FOOTER
+         ===================================================== -->
+
+    <footer>
+
+
+        <div class="footer-logo">
+
+            ZONE<span>-431</span>
+
+        </div>
+
+
+        <div class="footer-info">
+
+            <p>
+                SCP FOUNDATION // SITE-431
+            </p>
+
+            <p>
+                DOCUMENT CLASSIFIÉ — ACCÈS RESTREINT
+            </p>
+
+        </div>
+
+
+        <div class="footer-right">
+            431
+        </div>
+
+
+    </footer>
+
+
+</div>
+
+
+
+<!-- =========================================================
+     SUPABASE
+     ========================================================= -->
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+/* =========================================================
+   CONFIGURATION SUPABASE
+   ========================================================= */
+
+const SUPABASE_URL =
+    'https://pvtrlplsplyigvxiykce.supabase.co';
+
+
+const SUPABASE_KEY =
+    'sb_publishable_iwAj_zFrWEsMcqUKNINwJw_Po3QAwDG';
+
+
+const supabaseClient =
+    window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_KEY
+    );
+
+
+
+/* =========================================================
+   VARIABLES
+   ========================================================= */
+
+let currentRole = null;
+
+let allReports = [];
+
+
+
+/* =========================================================
+   RÔLES AUTORISÉS
+   ========================================================= */
+
+const ALLOWED_ROLES = [
+
+    'ANIMATION',
+    'MANAGER ANIM',
+    'ADMINISTRATEUR'
+
+];
+
+
+
+/* =========================================================
+   VÉRIFICATION DU RÔLE
+   ========================================================= */
+
+function checkStaffRole() {
+
+    const role =
+        sessionStorage.getItem(
+            'zone431_role'
+        );
+
+
+    if (!ALLOWED_ROLES.includes(role)) {
+
+        window.location.href =
+            'zone staff.html';
+
+        return false;
+
+    }
+
+
+    currentRole = role;
+
+    return true;
+
+}
+
+
+
+/* =========================================================
+   INITIALISATION
+   ========================================================= */
+
+document.addEventListener(
+    'DOMContentLoaded',
+    function() {
+
+        if (!checkStaffRole()) {
+            return;
+        }
+
+
+        document
+            .getElementById('eventsContent')
+            .classList.remove('hidden');
+
+
+
+        /* =================================================
+           STATUT
+           ================================================= */
+
+        const accessStatus =
+            document.getElementById(
+                'accessStatus'
+            );
+
+
+        if (
+            currentRole ===
+            'ADMINISTRATEUR'
+        ) {
+
+            accessStatus.textContent =
+                'ACCÈS ADMINISTRATEUR — GESTION AUTORISÉE';
+
+
+            document
+                .getElementById(
+                    'createReportButton'
+                )
+                .classList.remove('hidden');
+
+        }
+
+        else {
+
+            accessStatus.textContent =
+                `ACCÈS ${currentRole} — CONSULTATION`;
+
+        }
+
+
+
+        loadReports();
+
+    }
+);
+
+
+
+/* =========================================================
+   CHARGER RAPPORTS
+   ========================================================= */
+
+async function loadReports() {
+
+    const container =
+        document
+            .getElementById(
+                'reportsList'
+            );
+
+
+    container.innerHTML =
+        '<div class="loading">CHARGEMENT DES RAPPORTS...</div>';
+
+
+
+    const {
+        data,
+        error
+    } =
+        await supabaseClient
+            .from('event_reports')
+            .select('*')
+            .order(
+                'created_at',
+                {
+                    ascending: false
+                }
+            );
+
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur rapports :',
+            error
+        );
+
+
+        container.innerHTML = `
+
+            <div class="error-box">
+
+                IMPOSSIBLE DE CHARGER LES RAPPORTS.
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+    allReports =
+        data || [];
+
+
+    displayReports(
+        allReports
+    );
+
+}
+
+
+
+/* =========================================================
+   AFFICHER RAPPORTS
+   ========================================================= */
+
+function displayReports(
+    reports
+) {
+
+    const container =
+        document.getElementById(
+            'reportsList'
+        );
+
+
+    container.innerHTML = '';
+
+
+
+    if (!reports.length) {
+
+        container.innerHTML = `
+
+            <div class="empty-box">
+
+                <h3>
+                    AUCUN RAPPORT
+                </h3>
+
+                <p>
+                    Aucun rapport d'événement n'est actuellement enregistré.
+                </p>
+
+            </div>
+
+        `;
+
+
+        return;
+
+    }
+
+
+
+    reports.forEach(
+        (report, index) => {
+
+
+            const card =
+                document.createElement(
+                    'article'
+                );
+
+
+            card.className =
+                'report-card';
+
+
+
+            const reportNumber =
+                String(index + 1)
+                    .padStart(
+                        3,
+                        '0'
+                    );
+
+
+
+            /* =================================================
+               BOUTONS ADMIN
+               ================================================= */
+
+            const adminButtons =
+                currentRole ===
+                'ADMINISTRATEUR'
+
+                    ? `
+
+                        <div class="report-actions">
+
+                            <button
+                                type="button"
+                                onclick="editReport(${report.id})">
+
+                                MODIFIER
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="delete-action"
+                                onclick="deleteReport(${report.id})">
+
+                                SUPPRIMER
+
+                            </button>
+
+                        </div>
+
+                    `
+
+                    : '';
+
+
+
+            card.innerHTML = `
+
+                <div class="report-header">
+
+                    <div>
+
+                        <span class="report-number">
+                            RAPPORT-${reportNumber}
+                        </span>
+
+                        <h3>
+
+                            ${escapeHTML(
+                                report.nom
+                                || 'ÉVÉNEMENT SANS NOM'
+                            )}
+
+                        </h3>
+
+                    </div>
+
+
+                    <span class="report-status">
+
+                        ${escapeHTML(
+                            report.statut
+                            || 'TERMINE'
+                        )}
+
+                    </span>
+
+                </div>
+
+
+
+                <div class="report-info">
+
+
+                    <div class="report-info-item">
+
+                        <span>
+                            DATE
+                        </span>
+
+                        <strong>
+
+                            ${formatDate(
+                                report.date_event
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="report-info-item">
+
+                        <span>
+                            RESPONSABLE
+                        </span>
+
+                        <strong>
+
+                            ${escapeHTML(
+                                report.responsable
+                                || 'Non renseigné'
+                            )}
+
+                        </strong>
+
+                    </div>
+
+
+
+                    <div class="report-info-item">
+
+                        <span>
+                            PARTICIPANTS
+                        </span>
+
+                        <strong>
+
+                            ${Number(
+                                report.participants
+                            ) || 0}
+
+                        </strong>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="report-body">
+
+
+                    <div class="report-section">
+
+                        <div class="report-section-title">
+                            RÉSUMÉ
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                report.resume
+                                || 'Aucun résumé.'
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="report-section">
+
+                        <div class="report-section-title">
+                            DÉROULEMENT
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                report.deroulement
+                                || 'Aucune information.'
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="report-section report-incidents">
+
+                        <div class="report-section-title">
+                            INCIDENTS
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                report.incidents
+                                || 'Aucun incident signalé.'
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+
+                    <div class="report-section report-comments">
+
+                        <div class="report-section-title">
+                            COMMENTAIRES
+                        </div>
+
+                        <p>
+
+                            ${escapeHTML(
+                                report.commentaires
+                                || 'Aucun commentaire.'
+                            )}
+
+                        </p>
+
+                    </div>
+
+
+                </div>
+
+
+
+                ${adminButtons}
+
+            `;
+
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+
+/* =========================================================
+   RECHERCHE
+   ========================================================= */
+
+function searchReports() {
+
+    const input =
+        document.getElementById(
+            'searchInput'
+        );
+
+
+    if (!input) {
+        return;
+    }
+
+
+    const query =
+        input.value
+            .toLowerCase()
+            .trim();
+
+
+
+    if (!query) {
+
+        displayReports(
+            allReports
+        );
+
+        return;
+
+    }
+
+
+
+    const filtered =
+        allReports.filter(
+            report => {
+
+                return (
+
+                    (
+                        report.nom
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+
+                    ||
+
+
+                    (
+                        report.responsable
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+
+                    ||
+
+
+                    (
+                        report.resume
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+
+                    ||
+
+
+                    (
+                        report.deroulement
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+
+                    ||
+
+
+                    (
+                        report.incidents
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+
+                    ||
+
+
+                    (
+                        report.commentaires
+                        || ''
+                    )
+                        .toLowerCase()
+                        .includes(query)
+
+                );
+
+            }
+        );
+
+
+
+    displayReports(
+        filtered
+    );
+
+}
+
+
+
+/* =========================================================
+   CRÉATION
+   ========================================================= */
+
+function openCreateReport() {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+
+    document
+        .getElementById(
+            'eventReportForm'
+        )
+        .reset();
+
+
+    document
+        .getElementById(
+            'editingReportId'
+        )
+        .value = '';
+
+
+    document
+        .getElementById(
+            'reportModalTitle'
+        )
+        .textContent =
+            'NOUVEAU RAPPORT';
+
+
+    document
+        .getElementById(
+            'reportModal'
+        )
+        .classList.remove(
+            'hidden'
+        );
+
+}
+
+
+
+/* =========================================================
+   FERMER MODALE
+   ========================================================= */
+
+function closeReportModal() {
+
+    document
+        .getElementById(
+            'reportModal'
+        )
+        .classList.add(
+            'hidden'
+        );
+
+}
+
+
+
+/* =========================================================
+   RÉCUPÉRER LA DATE
+   ========================================================= */
+
+function getEventDate() {
+
+    const day =
+        document
+            .getElementById(
+                'eventDay'
+            )
+            .value
+            .trim();
+
+
+    const month =
+        document
+            .getElementById(
+                'eventMonth'
+            )
+            .value
+            .trim();
+
+
+    const year =
+        document
+            .getElementById(
+                'eventYear'
+            )
+            .value
+            .trim();
+
+
+
+    if (
+        !day
+        ||
+        !month
+        ||
+        !year
+    ) {
+
+        return null;
+
+    }
+
+
+
+    const dayNumber =
+        Number(day);
+
+
+    const monthNumber =
+        Number(month);
+
+
+    const yearNumber =
+        Number(year);
+
+
+
+    if (
+        !Number.isInteger(dayNumber)
+        ||
+        !Number.isInteger(monthNumber)
+        ||
+        !Number.isInteger(yearNumber)
+    ) {
+
+        return null;
+
+    }
+
+
+
+    if (
+        dayNumber < 1
+        ||
+        dayNumber > 31
+    ) {
+
+        return null;
+
+    }
+
+
+
+    if (
+        monthNumber < 1
+        ||
+        monthNumber > 12
+    ) {
+
+        return null;
+
+    }
+
+
+
+    if (
+        yearNumber < 2020
+        ||
+        yearNumber > 2100
+    ) {
+
+        return null;
+
+    }
+
+
+
+    return (
+
+        String(yearNumber)
+
+        + '-'
+
+        + String(monthNumber)
+            .padStart(
+                2,
+                '0'
+            )
+
+        + '-'
+
+        + String(dayNumber)
+            .padStart(
+                2,
+                '0'
+            )
+
+    );
+
+}
+
+
+
+/* =========================================================
+   ENREGISTRER
+   ========================================================= */
+
+async function saveReport(
+    event
+) {
+
+    event.preventDefault();
+
+
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+
+    const id =
+        document
+            .getElementById(
+                'editingReportId'
+            )
+            .value;
+
+
+
+    const eventDate =
+        getEventDate();
+
+
+
+    if (!eventDate) {
+
+        alert(
+            'Veuillez entrer une date valide au format JJ / MM / AAAA.'
+        );
+
+        return;
+
+    }
+
+
+
+    const reportData = {
+
+        nom:
+            document
+                .getElementById(
+                    'eventName'
+                )
+                .value
+                .trim(),
+
+
+        date_event:
+            eventDate,
+
+
+        responsable:
+            document
+                .getElementById(
+                    'eventLeader'
+                )
+                .value
+                .trim(),
+
+
+        participants:
+            Number(
+                document
+                    .getElementById(
+                        'eventParticipants'
+                    )
+                    .value
+            ) || 0,
+
+
+        resume:
+            document
+                .getElementById(
+                    'eventSummary'
+                )
+                .value
+                .trim(),
+
+
+        deroulement:
+            document
+                .getElementById(
+                    'eventProgress'
+                )
+                .value
+                .trim(),
+
+
+        incidents:
+            document
+                .getElementById(
+                    'eventIncidents'
+                )
+                .value
+                .trim(),
+
+
+        commentaires:
+            document
+                .getElementById(
+                    'eventComments'
+                )
+                .value
+                .trim(),
+
+
+        statut:
+            document
+                .getElementById(
+                    'eventStatus'
+                )
+                .value
+
+    };
+
+
+
+    /* =====================================================
+       MODIFICATION
+       ===================================================== */
+
+    if (id) {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    'event_reports'
+                )
+                .update(
+                    reportData
+                )
+                .eq(
+                    'id',
+                    id
+                );
+
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur modification :',
+                error
+            );
+
+
+            alert(
+                'Erreur lors de la modification du rapport.'
+            );
+
+
+            return;
+
+        }
+
+    }
+
+
+
+    /* =====================================================
+       CRÉATION
+       ===================================================== */
+
+    else {
+
+        const {
+            error
+        } =
+            await supabaseClient
+                .from(
+                    'event_reports'
+                )
+                .insert(
+                    reportData
+                );
+
+
+
+        if (error) {
+
+            console.error(
+                'ZONE-431 — Erreur création :',
+                error
+            );
+
+
+            alert(
+                'Erreur lors de la création du rapport.'
+            );
+
+
+            return;
+
+        }
+
+    }
+
+
+
+    closeReportModal();
+
+
+    await loadReports();
+
+}
+
+
+
+/* =========================================================
+   MODIFIER
+   ========================================================= */
+
+function editReport(
+    id
+) {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+
+    const report =
+        allReports.find(
+            item =>
+                item.id === id
+        );
+
+
+
+    if (!report) {
+        return;
+    }
+
+
+
+    document
+        .getElementById(
+            'editingReportId'
+        )
+        .value = id;
+
+
+
+    document
+        .getElementById(
+            'eventName'
+        )
+        .value =
+            report.nom || '';
+
+
+
+    /* =====================================================
+       DATE
+       ===================================================== */
+
+    if (
+        report.date_event
+    ) {
+
+        const parts =
+            String(
+                report.date_event
+            )
+                .split('-');
+
+
+        if (
+            parts.length === 3
+        ) {
+
+            document
+                .getElementById(
+                    'eventYear'
+                )
+                .value =
+                    parts[0];
+
+
+            document
+                .getElementById(
+                    'eventMonth'
+                )
+                .value =
+                    Number(
+                        parts[1]
+                    );
+
+
+            document
+                .getElementById(
+                    'eventDay'
+                )
+                .value =
+                    Number(
+                        parts[2]
+                    );
+
+        }
+
+    }
+
+    else {
+
+        document
+            .getElementById(
+                'eventDay'
+            )
+            .value = '';
+
+
+        document
+            .getElementById(
+                'eventMonth'
+            )
+            .value = '';
+
+
+        document
+            .getElementById(
+                'eventYear'
+            )
+            .value = '';
+
+    }
+
+
+
+    document
+        .getElementById(
+            'eventLeader'
+        )
+        .value =
+            report.responsable
+            || '';
+
+
+
+    document
+        .getElementById(
+            'eventParticipants'
+        )
+        .value =
+            report.participants
+            || 0;
+
+
+
+    document
+        .getElementById(
+            'eventSummary'
+        )
+        .value =
+            report.resume
+            || '';
+
+
+
+    document
+        .getElementById(
+            'eventProgress'
+        )
+        .value =
+            report.deroulement
+            || '';
+
+
+
+    document
+        .getElementById(
+            'eventIncidents'
+        )
+        .value =
+            report.incidents
+            || '';
+
+
+
+    document
+        .getElementById(
+            'eventComments'
+        )
+        .value =
+            report.commentaires
+            || '';
+
+
+
+    document
+        .getElementById(
+            'eventStatus'
+        )
+        .value =
+            report.statut
+            || 'TERMINE';
+
+
+
+    document
+        .getElementById(
+            'reportModalTitle'
+        )
+        .textContent =
+            'MODIFIER LE RAPPORT';
+
+
+
+    document
+        .getElementById(
+            'reportModal'
+        )
+        .classList.remove(
+            'hidden'
+        );
+
+}
+
+
+
+/* =========================================================
+   SUPPRIMER
+   ========================================================= */
+
+async function deleteReport(
+    id
+) {
+
+    if (
+        currentRole !==
+        'ADMINISTRATEUR'
+    ) {
+
+        return;
+
+    }
+
+
+
+    const confirmation =
+        confirm(
+            'Voulez-vous vraiment supprimer ce rapport ?'
+        );
+
+
+
+    if (!confirmation) {
+        return;
+    }
+
+
+
+    const {
+        error
+    } =
+        await supabaseClient
+            .from(
+                'event_reports'
+            )
+            .delete()
+            .eq(
+                'id',
+                id
+            );
+
+
+
+    if (error) {
+
+        console.error(
+            'ZONE-431 — Erreur suppression :',
+            error
+        );
+
+
+        alert(
+            'Impossible de supprimer le rapport.'
+        );
+
+
+        return;
+
+    }
+
+
+
+    await loadReports();
+
+}
+
+
+
+/* =========================================================
+   FORMAT DATE
+   ========================================================= */
+
+function formatDate(
+    date
+) {
+
+    if (!date) {
+
+        return 'Non renseignée';
+
+    }
+
+
+    const parts =
+        String(date)
+            .split('-');
+
+
+    if (
+        parts.length !== 3
+    ) {
+
+        return date;
+
+    }
+
+
+    return (
+
+        parts[2]
+        + '/'
+        + parts[1]
+        + '/'
+        + parts[0]
+
+    );
+
+}
+
+
+
+/* =========================================================
+   PROTECTION HTML
+   ========================================================= */
+
+function escapeHTML(
+    value
+) {
+
+    return String(
+        value ?? ''
+    )
+        .replace(
+            /&/g,
+            '&amp;'
+        )
+        .replace(
+            /</g,
+            '&lt;'
+        )
+        .replace(
+            />/g,
+            '&gt;'
+        )
+        .replace(
+            /"/g,
+            '&quot;'
+        )
+        .replace(
+            /'/g,
+            '&#039;'
+        );
+
+}
+
+</script>
+
+
+</body>
+
+</html>

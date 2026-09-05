@@ -1,0 +1,2186 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Administration — Zone-431</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background: #050505;
+            color: #e8e8e8;
+            font-family: Arial, Helvetica, sans-serif;
+            min-height: 100vh;
+        }
+
+        /* =========================================================
+           TOPBAR
+        ========================================================= */
+
+        .topbar {
+            height: 70px;
+            background: #090909;
+            border-bottom: 1px solid #a00000;
+            display: flex;
+            align-items: center;
+            padding: 0 30px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 0 20px rgba(180, 0, 0, 0.15);
+        }
+
+        .logo {
+            color: #c00000;
+            font-size: 22px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-right: 40px;
+            white-space: nowrap;
+        }
+
+        .nav {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .nav a {
+            color: #aaa;
+            text-decoration: none;
+            padding: 10px 14px;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .nav a:hover {
+            color: white;
+            background: #151515;
+        }
+
+        .nav a.active {
+            color: white;
+            border-bottom: 2px solid #b00000;
+        }
+
+        /* =========================================================
+           PAGE
+        ========================================================= */
+
+        .page {
+            width: min(1400px, 94%);
+            margin: 45px auto;
+        }
+
+        .page-header {
+            margin-bottom: 35px;
+            border-left: 4px solid #b00000;
+            padding-left: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 32px;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           ADMIN BAR
+        ========================================================= */
+
+        .admin-bar {
+            background: #0d0d0d;
+            border: 1px solid #262626;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .admin-status {
+            color: #888;
+            font-size: 13px;
+        }
+
+        .admin-status span {
+            color: #d00000;
+            font-weight: bold;
+        }
+
+        .button {
+            border: 1px solid #9e0000;
+            background: #130000;
+            color: #eee;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: 0.2s;
+        }
+
+        .button:hover {
+            background: #8f0000;
+            border-color: #c00000;
+            color: white;
+        }
+
+        .button.green {
+            border-color: #286d39;
+            background: #0b1b0e;
+        }
+
+        .button.green:hover {
+            background: #145521;
+        }
+
+        .button.gray {
+            border-color: #444;
+            background: #111;
+        }
+
+        .button.gray:hover {
+            background: #222;
+        }
+
+        .button.danger {
+            border-color: #a00000;
+            background: #230000;
+        }
+
+        .button.danger:hover {
+            background: #a00000;
+        }
+
+        /* =========================================================
+           SEARCH
+        ========================================================= */
+
+        .search-box {
+            margin-bottom: 20px;
+        }
+
+        .search-box input {
+            width: 100%;
+            background: #0d0d0d;
+            color: white;
+            border: 1px solid #292929;
+            padding: 14px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #8f0000;
+        }
+
+        /* =========================================================
+           MEMBERS
+        ========================================================= */
+
+        #membersList {
+            display: grid;
+            gap: 12px;
+        }
+
+        .member-card {
+            background: #0c0c0c;
+            border: 1px solid #242424;
+            padding: 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            transition: 0.2s;
+        }
+
+        .member-card:hover {
+            border-color: #4d0000;
+            background: #101010;
+        }
+
+        .member-card.inactive {
+            opacity: 0.5;
+        }
+
+        .member-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-name {
+            font-size: 17px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .member-ig {
+            color: #777;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .member-role {
+            display: inline-block;
+            color: #e1e1e1;
+            background: #171717;
+            border-left: 3px solid #a00000;
+            padding: 5px 9px;
+            font-size: 11px;
+        }
+
+        .member-meta {
+            margin-top: 10px;
+            color: #666;
+            font-size: 11px;
+        }
+
+        .member-actions {
+            display: flex;
+            gap: 7px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        /* =========================================================
+           EMPTY / LOADING
+        ========================================================= */
+
+        .empty {
+            background: #0d0d0d;
+            border: 1px dashed #303030;
+            padding: 35px;
+            text-align: center;
+            color: #666;
+        }
+
+        .loading {
+            color: #777;
+            text-align: center;
+            padding: 40px;
+        }
+
+        /* =========================================================
+           MODALS
+        ========================================================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.82);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-box {
+            width: min(560px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #0b0b0b;
+            border: 1px solid #750000;
+            box-shadow: 0 0 35px rgba(150, 0, 0, 0.2);
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #242424;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 18px;
+            letter-spacing: 1px;
+        }
+
+        .close {
+            color: #888;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: white;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            color: #999;
+            font-size: 12px;
+            margin-bottom: 7px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            background: #050505;
+            color: white;
+            border: 1px solid #2c2c2c;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            border-color: #900000;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            border-top: 1px solid #242424;
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+        }
+
+        .error {
+            display: none;
+            color: #ff5555;
+            background: #220000;
+            border: 1px solid #720000;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .error.show {
+            display: block;
+        }
+
+        .success {
+            display: none;
+            color: #65d47a;
+            background: #0a1d0d;
+            border: 1px solid #286d39;
+            padding: 10px;
+            margin-bottom: 15px;
+            font-size: 12px;
+        }
+
+        .success.show {
+            display: block;
+        }
+
+        /* =========================================================
+           CODE MODAL
+        ========================================================= */
+
+        .code-display {
+            background: #050505;
+            border: 1px solid #333;
+            padding: 20px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .code-display strong {
+            color: #d00000;
+            font-size: 22px;
+            letter-spacing: 3px;
+        }
+
+        /* =========================================================
+           QUICK LINKS
+        ========================================================= */
+
+        .quick-links {
+            margin-top: 40px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+
+        .quick-link {
+            display: block;
+            text-decoration: none;
+            color: #aaa;
+            background: #0c0c0c;
+            border: 1px solid #222;
+            padding: 18px;
+            transition: 0.2s;
+        }
+
+        .quick-link:hover {
+            color: white;
+            border-color: #700000;
+            background: #111;
+        }
+
+        .quick-link strong {
+            display: block;
+            color: #ddd;
+            margin-bottom: 6px;
+        }
+
+        .quick-link span {
+            color: #666;
+            font-size: 11px;
+        }
+
+        /* =========================================================
+           RESPONSIVE
+        ========================================================= */
+
+        @media (max-width: 900px) {
+            .topbar {
+                height: auto;
+                padding: 15px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+
+            .logo {
+                margin-right: 0;
+            }
+
+            .nav {
+                width: 100%;
+                overflow-x: auto;
+            }
+
+            .member-card {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .member-actions {
+                justify-content: flex-start;
+            }
+
+            .quick-links {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 550px) {
+            .page {
+                width: 92%;
+                margin: 30px auto;
+            }
+
+            .quick-links {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =========================================================
+         TOPBAR
+    ========================================================= -->
+
+    <header class="topbar">
+
+        <div class="logo">
+            ZONE-431
+        </div>
+
+        <nav class="nav">
+            <a href="accueil.html">ACCUEIL</a>
+            <a href="menu.html">LA ZONE</a>
+            <a href="département.html">DÉPARTEMENTS</a>
+            <a href="documents.html">DOCUMENTS</a>
+            <a href="contact.html">CONTACT</a>
+            <a href="zone staff.html" class="active">ZONE STAFF</a>
+        </nav>
+
+    </header>
+
+
+    <!-- =========================================================
+         PAGE
+    ========================================================= -->
+
+    <main class="page">
+
+        <div class="page-header">
+            <h1>ADMINISTRATION</h1>
+
+            <p>
+                Gestion des membres du personnel et des autorisations d'accès.
+            </p>
+        </div>
+
+
+        <!-- =====================================================
+             ADMIN BAR
+        ===================================================== -->
+
+        <div class="admin-bar">
+
+            <div class="admin-status">
+                SESSION :
+                <span id="adminStatus">
+                    VÉRIFICATION...
+                </span>
+            </div>
+
+            <button
+                class="button"
+                id="createMemberButton"
+                onclick="openCreateModal()"
+            >
+                + CRÉER UNE PERMISSION
+            </button>
+
+        </div>
+
+
+        <!-- =====================================================
+             SEARCH
+        ===================================================== -->
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchMembers"
+                placeholder="Rechercher un membre, un rôle ou un pseudo Roblox..."
+                oninput="filterMembers()"
+            >
+
+        </div>
+
+
+        <!-- =====================================================
+             MEMBERS LIST
+        ===================================================== -->
+
+        <section id="membersList">
+
+            <div class="loading">
+                Chargement des membres...
+            </div>
+
+        </section>
+
+
+        <!-- =====================================================
+             QUICK LINKS
+        ===================================================== -->
+
+        <div class="quick-links">
+
+            <a class="quick-link" href="roster.html">
+                <strong>ROSTERS</strong>
+                <span>Gestion des effectifs.</span>
+            </a>
+
+            <a class="quick-link" href="sanctions.html">
+                <strong>SANCTIONS</strong>
+                <span>Consulter les sanctions.</span>
+            </a>
+
+            <a class="quick-link" href="Events.html">
+                <strong>ÉVÈNEMENTS</strong>
+                <span>Rapports d'évènements.</span>
+            </a>
+
+            <a class="quick-link" href="zone staff.html">
+                <strong>ZONE STAFF</strong>
+                <span>Retour à l'espace staff.</span>
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- =========================================================
+         MEMBER MODAL
+    ========================================================= -->
+
+    <div class="modal" id="memberModal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2 id="memberModalTitle">
+                    CRÉER UNE PERMISSION
+                </h2>
+
+                <span
+                    class="close"
+                    onclick="closeMemberModal()"
+                >
+                    ×
+                </span>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <div id="memberError" class="error"></div>
+                <div id="memberSuccess" class="success"></div>
+
+
+                <input
+                    type="hidden"
+                    id="editingMemberId"
+                >
+
+
+                <div class="form-group">
+
+                    <label for="memberDiscord">
+                        PSEUDO DISCORD
+                    </label>
+
+                    <input
+                        type="text"
+                        id="memberDiscord"
+                        placeholder="Ex : SCP_Fragment"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="memberIG">
+                        PSEUDO IG — ROBLOX
+                    </label>
+
+                    <input
+                        type="text"
+                        id="memberIG"
+                        placeholder="Pseudo du joueur sur Roblox"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="memberRole">
+                        RÔLE
+                    </label>
+
+                    <select id="memberRole">
+
+                        <option value="MODÉRATION">
+                            MODÉRATION
+                        </option>
+
+                        <option value="ANIMATION">
+                            ANIMATION
+                        </option>
+
+                        <option value="MANAGER MOD">
+                            MANAGER MOD
+                        </option>
+
+                        <option value="MANAGER ANIM">
+                            MANAGER ANIM
+                        </option>
+
+                        <option value="ADMINISTRATEUR">
+                            ADMINISTRATEUR
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="memberCode">
+                        CODE D'ACCÈS
+                    </label>
+
+                    <input
+                        type="text"
+                        id="memberCode"
+                        placeholder="Code utilisé pour se connecter"
+                        autocomplete="off"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="memberWarns">
+                        AVERTISSEMENTS
+                    </label>
+
+                    <input
+                        type="number"
+                        id="memberWarns"
+                        min="0"
+                        value="0"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="button gray"
+                    onclick="closeMemberModal()"
+                >
+                    ANNULER
+                </button>
+
+                <button
+                    class="button"
+                    onclick="saveMember()"
+                >
+                    ENREGISTRER
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         CODE MODAL
+    ========================================================= -->
+
+    <div class="modal" id="codeModal">
+
+        <div class="modal-box">
+
+            <div class="modal-header">
+
+                <h2>
+                    CODE D'ACCÈS
+                </h2>
+
+                <span
+                    class="close"
+                    onclick="closeCodeModal()"
+                >
+                    ×
+                </span>
+
+            </div>
+
+
+            <div class="modal-body">
+
+                <p
+                    id="codeMemberName"
+                    style="color:#888; margin-bottom:15px;"
+                >
+                </p>
+
+                <div class="code-display">
+
+                    <strong id="displayedCode">
+                        —
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <div class="modal-footer">
+
+                <button
+                    class="button gray"
+                    onclick="closeCodeModal()"
+                >
+                    FERMER
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- =========================================================
+         SUPABASE
+    ========================================================= -->
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+    <!-- =========================================================
+         JAVASCRIPT
+    ========================================================= -->
+
+    <script>
+
+    /* =====================================================
+       CONFIGURATION SUPABASE
+    ===================================================== */
+
+    const SUPABASE_URL =
+        "https://pvtrlplsplyigvxiykce.supabase.co";
+
+    const SUPABASE_KEY =
+        "sb_publishable_iwAj_zFrWEsMcqUKNINwJw_Po3QAwDG";
+
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_KEY
+        );
+
+
+    /* =====================================================
+       VARIABLES
+    ===================================================== */
+
+    let members = [];
+    let currentRole = null;
+
+
+    /* =====================================================
+       INITIALISATION
+    ===================================================== */
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        async () => {
+
+            await checkAdminAccess();
+
+        }
+    );
+
+
+    /* =====================================================
+       VÉRIFICATION ADMIN
+    ===================================================== */
+
+    async function checkAdminAccess() {
+
+        const status =
+            document.getElementById(
+                "adminStatus"
+            );
+
+        try {
+
+            const {
+                data,
+                error
+            } = await supabaseClient.rpc(
+                "current_staff_role"
+            );
+
+
+            if (error) {
+
+                console.error(
+                    "Erreur vérification rôle :",
+                    error
+                );
+
+                status.textContent =
+                    "ERREUR";
+
+                setTimeout(() => {
+
+                    window.location.href =
+                        "zone staff.html";
+
+                }, 1500);
+
+                return;
+
+            }
+
+
+            currentRole = data;
+
+
+            if (
+                currentRole !==
+                "ADMINISTRATEUR"
+            ) {
+
+                status.textContent =
+                    "ACCÈS REFUSÉ";
+
+                alert(
+                    "Accès réservé aux administrateurs."
+                );
+
+                window.location.href =
+                    "zone staff.html";
+
+                return;
+
+            }
+
+
+            sessionStorage.setItem(
+                "zone431_role",
+                currentRole
+            );
+
+
+            status.textContent =
+                "ADMINISTRATEUR";
+
+
+            await loadMembers();
+
+        }
+        catch (error) {
+
+            console.error(
+                "Erreur vérification admin :",
+                error
+            );
+
+            status.textContent =
+                "ERREUR";
+
+            setTimeout(() => {
+
+                window.location.href =
+                    "zone staff.html";
+
+            }, 1500);
+
+        }
+
+    }
+
+
+    /* =====================================================
+       CHARGER LES MEMBRES
+    ===================================================== */
+
+    async function loadMembers() {
+
+        const list =
+            document.getElementById(
+                "membersList"
+            );
+
+
+        list.innerHTML = `
+            <div class="loading">
+                Chargement des membres...
+            </div>
+        `;
+
+
+        const {
+            data,
+            error
+        } = await supabaseClient.rpc(
+            "admin_list_staff"
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur chargement membres :",
+                error
+            );
+
+            list.innerHTML = `
+                <div class="empty">
+                    Impossible de charger les membres.<br>
+                    <small>${escapeHTML(error.message)}</small>
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        members = data || [];
+
+        displayMembers();
+
+    }
+
+
+    /* =====================================================
+       AFFICHER LES MEMBRES
+    ===================================================== */
+
+    function displayMembers() {
+
+        const list =
+            document.getElementById(
+                "membersList"
+            );
+
+
+        const search =
+            document
+                .getElementById(
+                    "searchMembers"
+                )
+                .value
+                .toLowerCase()
+                .trim();
+
+
+        const filtered =
+            members.filter(member => {
+
+                const discord =
+                    (
+                        member.pseudo_discord ||
+                        ""
+                    ).toLowerCase();
+
+                const roblox =
+                    (
+                        member.pseudo_ig ||
+                        ""
+                    ).toLowerCase();
+
+                const role =
+                    (
+                        member.role ||
+                        ""
+                    ).toLowerCase();
+
+                return (
+                    discord.includes(search) ||
+                    roblox.includes(search) ||
+                    role.includes(search)
+                );
+
+            });
+
+
+        if (!filtered.length) {
+
+            list.innerHTML = `
+                <div class="empty">
+                    Aucun membre trouvé.
+                </div>
+            `;
+
+            return;
+
+        }
+
+
+        list.innerHTML =
+            filtered
+                .map(member => {
+
+                    const discord =
+                        escapeHTML(
+                            member.pseudo_discord ||
+                            "Sans pseudo"
+                        );
+
+
+                    const roblox =
+                        escapeHTML(
+                            member.pseudo_ig ||
+                            "Non renseigné"
+                        );
+
+
+                    const role =
+                        escapeHTML(
+                            member.role ||
+                            "Aucun rôle"
+                        );
+
+
+                    const warns =
+                        Number(
+                            member.warns || 0
+                        );
+
+
+                    const active =
+                        member.active === true;
+
+
+                    const status =
+                        active
+                            ? "ACTIF"
+                            : "RÉVOQUÉ";
+
+
+                    return `
+
+                        <div
+                            class="member-card ${active ? "" : "inactive"}"
+                        >
+
+                            <div class="member-info">
+
+                                <div class="member-name">
+                                    ${discord}
+                                </div>
+
+                                <div class="member-ig">
+                                    IG / ROBLOX :
+                                    ${roblox}
+                                </div>
+
+                                <div class="member-role">
+                                    ${role}
+                                </div>
+
+                                <div class="member-meta">
+                                    STATUT :
+                                    ${status}
+                                    &nbsp; • &nbsp;
+                                    AVERTISSEMENTS :
+                                    ${warns}
+                                </div>
+
+                            </div>
+
+
+                            <div class="member-actions">
+
+                                <button
+                                    class="button gray"
+                                    onclick="showMemberCode(${member.id})"
+                                >
+                                    VOIR LE CODE
+                                </button>
+
+
+                                <button
+                                    class="button"
+                                    onclick="editMember(${member.id})"
+                                >
+                                    MODIFIER
+                                </button>
+
+
+                                ${
+                                    active
+
+                                    ? `
+
+                                        <button
+                                            class="button danger"
+                                            onclick="revokeAccess(${member.id})"
+                                        >
+                                            RÉVOQUER
+                                        </button>
+
+                                    `
+
+                                    : `
+
+                                        <button
+                                            class="button green"
+                                            onclick="restoreAccess(${member.id})"
+                                        >
+                                            RESTAURER
+                                        </button>
+
+                                    `
+                                }
+
+
+                                <button
+                                    class="button danger"
+                                    onclick="deleteMember(${member.id})"
+                                >
+                                    SUPPRIMER
+                                </button>
+
+                            </div>
+
+                        </div>
+
+                    `;
+
+                })
+                .join("");
+
+    }
+
+
+    /* =====================================================
+       RECHERCHE
+    ===================================================== */
+
+    function filterMembers() {
+
+        displayMembers();
+
+    }
+
+
+    /* =====================================================
+       OUVRIR CRÉATION
+    ===================================================== */
+
+    function openCreateModal() {
+
+        document.getElementById(
+            "memberModalTitle"
+        ).textContent =
+            "CRÉER UNE PERMISSION";
+
+
+        document.getElementById(
+            "editingMemberId"
+        ).value = "";
+
+
+        document.getElementById(
+            "memberDiscord"
+        ).value = "";
+
+
+        document.getElementById(
+            "memberIG"
+        ).value = "";
+
+
+        document.getElementById(
+            "memberRole"
+        ).value =
+            "MODÉRATION";
+
+
+        document.getElementById(
+            "memberCode"
+        ).value = "";
+
+
+        document.getElementById(
+            "memberWarns"
+        ).value = 0;
+
+
+        clearMessages();
+
+
+        document
+            .getElementById(
+                "memberModal"
+            )
+            .classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       MODIFIER UN MEMBRE
+    ===================================================== */
+
+    function editMember(id) {
+
+        const member =
+            members.find(
+                item =>
+                    Number(item.id) ===
+                    Number(id)
+            );
+
+
+        if (!member) {
+
+            alert(
+                "Membre introuvable."
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "memberModalTitle"
+        ).textContent =
+            "MODIFIER LA PERMISSION";
+
+
+        document.getElementById(
+            "editingMemberId"
+        ).value =
+            member.id;
+
+
+        document.getElementById(
+            "memberDiscord"
+        ).value =
+            member.pseudo_discord || "";
+
+
+        document.getElementById(
+            "memberIG"
+        ).value =
+            member.pseudo_ig || "";
+
+
+        document.getElementById(
+            "memberRole"
+        ).value =
+            member.role || "MODÉRATION";
+
+
+        document.getElementById(
+            "memberCode"
+        ).value =
+            member.code_value || "";
+
+
+        document.getElementById(
+            "memberWarns"
+        ).value =
+            Number(
+                member.warns || 0
+            );
+
+
+        clearMessages();
+
+
+        document
+            .getElementById(
+                "memberModal"
+            )
+            .classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       SAUVEGARDER
+    ===================================================== */
+
+    async function saveMember() {
+
+        clearMessages();
+
+
+        if (
+            currentRole !==
+            "ADMINISTRATEUR"
+        ) {
+
+            showError(
+                "Vous n'avez pas les permissions nécessaires."
+            );
+
+            return;
+
+        }
+
+
+        const id =
+            document.getElementById(
+                "editingMemberId"
+            ).value;
+
+
+        const discord =
+            document.getElementById(
+                "memberDiscord"
+            ).value.trim();
+
+
+        const roblox =
+            document.getElementById(
+                "memberIG"
+            ).value.trim();
+
+
+        const role =
+            document.getElementById(
+                "memberRole"
+            ).value;
+
+
+        const code =
+            document.getElementById(
+                "memberCode"
+            ).value.trim();
+
+
+        const warns =
+            Number(
+                document.getElementById(
+                    "memberWarns"
+                ).value || 0
+            );
+
+
+        /* =================================================
+           VALIDATION
+        ================================================= */
+
+        if (!discord) {
+
+            showError(
+                "Le pseudo Discord est obligatoire."
+            );
+
+            return;
+
+        }
+
+
+        if (!roblox) {
+
+            showError(
+                "Le pseudo IG Roblox est obligatoire."
+            );
+
+            return;
+
+        }
+
+
+        if (!code) {
+
+            showError(
+                "Le code d'accès est obligatoire."
+            );
+
+            return;
+
+        }
+
+
+        if (code.length < 4) {
+
+            showError(
+                "Le code doit contenir au moins 4 caractères."
+            );
+
+            return;
+
+        }
+
+
+        if (
+            !Number.isInteger(warns) ||
+            warns < 0
+        ) {
+
+            showError(
+                "Le nombre d'avertissements est invalide."
+            );
+
+            return;
+
+        }
+
+
+        try {
+
+            /* =================================================
+               CRÉATION
+            ================================================= */
+
+            if (!id) {
+
+                const {
+                    data,
+                    error
+                } = await supabaseClient.rpc(
+                    "admin_create_staff",
+                    {
+                        p_pseudo_discord:
+                            discord,
+
+                        p_pseudo_ig:
+                            roblox,
+
+                        p_role:
+                            role,
+
+                        p_code:
+                            code
+                    }
+                );
+
+
+                if (error) {
+
+                    console.error(
+                        "Erreur création membre :",
+                        error
+                    );
+
+                    showError(
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   RÉCUPÉRATION DE L'ID CRÉÉ
+                ============================================= */
+
+                const createdId =
+                    Array.isArray(data)
+                        ? data[0]?.id
+                        : data?.id;
+
+
+                if (!createdId) {
+
+                    console.error(
+                        "ID du membre créé introuvable :",
+                        data
+                    );
+
+                    showError(
+                        "Le membre a été créé, mais son identifiant est introuvable."
+                    );
+
+                    await loadMembers();
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   ENREGISTREMENT DES WARN
+                ============================================= */
+
+                if (warns !== 0) {
+
+                    const {
+                        error: warnsError
+                    } = await supabaseClient.rpc(
+                        "admin_set_warns",
+                        {
+                            p_staff_id:
+                                Number(createdId),
+
+                            p_warns:
+                                warns
+                        }
+                    );
+
+
+                    if (warnsError) {
+
+                        console.error(
+                            "Erreur enregistrement WARN :",
+                            warnsError
+                        );
+
+                        showError(
+                            "Le membre a été créé, mais les avertissements n'ont pas pu être enregistrés."
+                        );
+
+                        await loadMembers();
+
+                        return;
+
+                    }
+
+                }
+
+
+                showSuccess(
+                    "Permission créée avec succès."
+                );
+
+            }
+
+
+            /* =================================================
+               MODIFICATION
+            ================================================= */
+
+            else {
+
+                const {
+                    error
+                } = await supabaseClient.rpc(
+                    "admin_update_staff",
+                    {
+                        p_staff_id:
+                            Number(id),
+
+                        p_pseudo_discord:
+                            discord,
+
+                        p_pseudo_ig:
+                            roblox,
+
+                        p_role:
+                            role,
+
+                        p_code:
+                            code
+                    }
+                );
+
+
+                if (error) {
+
+                    console.error(
+                        "Erreur modification membre :",
+                        error
+                    );
+
+                    showError(
+                        error.message
+                    );
+
+                    return;
+
+                }
+
+
+                /* =============================================
+                   MISE À JOUR DES WARN
+                ============================================= */
+
+                const {
+                    error: warnsError
+                } = await supabaseClient.rpc(
+                    "admin_set_warns",
+                    {
+                        p_staff_id:
+                            Number(id),
+
+                        p_warns:
+                            warns
+                    }
+                );
+
+
+                if (warnsError) {
+
+                    console.error(
+                        "Erreur modification WARN :",
+                        warnsError
+                    );
+
+                    showError(
+                        "Les informations ont été modifiées, mais les avertissements n'ont pas pu être enregistrés."
+                    );
+
+                    await loadMembers();
+
+                    return;
+
+                }
+
+
+                showSuccess(
+                    "Permission modifiée avec succès."
+                );
+
+            }
+
+
+            /* =================================================
+               ACTUALISATION
+            ================================================= */
+
+            await loadMembers();
+
+
+            setTimeout(() => {
+
+                closeMemberModal();
+
+            }, 700);
+
+
+        }
+        catch (error) {
+
+            console.error(
+                "Erreur inattendue saveMember :",
+                error
+            );
+
+            showError(
+                "Une erreur inattendue est survenue."
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       VOIR LE CODE
+    ===================================================== */
+
+    function showMemberCode(id) {
+
+        const member =
+            members.find(
+                item =>
+                    Number(item.id) ===
+                    Number(id)
+            );
+
+
+        if (!member) {
+
+            alert(
+                "Membre introuvable."
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "codeMemberName"
+        ).textContent =
+            "Code de " +
+            (
+                member.pseudo_discord ||
+                "ce membre"
+            );
+
+
+        document.getElementById(
+            "displayedCode"
+        ).textContent =
+            member.code_value ||
+            "CODE NON DISPONIBLE";
+
+
+        document
+            .getElementById(
+                "codeModal"
+            )
+            .classList.add("show");
+
+    }
+
+
+    /* =====================================================
+       RÉVOQUER
+    ===================================================== */
+
+    async function revokeAccess(id) {
+
+        const member =
+            members.find(
+                item =>
+                    Number(item.id) ===
+                    Number(id)
+            );
+
+
+        if (!member) {
+            return;
+        }
+
+
+        const confirmAction =
+            confirm(
+                "Voulez-vous vraiment révoquer l'accès de " +
+                member.pseudo_discord +
+                " ?"
+            );
+
+
+        if (!confirmAction) {
+            return;
+        }
+
+
+        const {
+            error
+        } = await supabaseClient.rpc(
+            "admin_revoke_staff",
+            {
+                p_staff_id:
+                    Number(id)
+            }
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur révocation :",
+                error
+            );
+
+            alert(
+                "Erreur : " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        await loadMembers();
+
+    }
+
+
+    /* =====================================================
+       RESTAURER
+    ===================================================== */
+
+    async function restoreAccess(id) {
+
+        const confirmAction =
+            confirm(
+                "Voulez-vous restaurer l'accès de ce membre ?"
+            );
+
+
+        if (!confirmAction) {
+            return;
+        }
+
+
+        const {
+            error
+        } = await supabaseClient.rpc(
+            "admin_restore_staff",
+            {
+                p_staff_id:
+                    Number(id)
+            }
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur restauration :",
+                error
+            );
+
+            alert(
+                "Erreur : " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        await loadMembers();
+
+    }
+
+
+    /* =====================================================
+       SUPPRIMER
+    ===================================================== */
+
+    async function deleteMember(id) {
+
+        const member =
+            members.find(
+                item =>
+                    Number(item.id) ===
+                    Number(id)
+            );
+
+
+        if (!member) {
+            return;
+        }
+
+
+        const confirmAction =
+            confirm(
+                "Supprimer définitivement la permission de " +
+                member.pseudo_discord +
+                " ?\n\nCette action est irréversible."
+            );
+
+
+        if (!confirmAction) {
+            return;
+        }
+
+
+        const {
+            error
+        } = await supabaseClient.rpc(
+            "admin_delete_staff",
+            {
+                p_staff_id:
+                    Number(id)
+            }
+        );
+
+
+        if (error) {
+
+            console.error(
+                "Erreur suppression :",
+                error
+            );
+
+            alert(
+                "Erreur : " +
+                error.message
+            );
+
+            return;
+
+        }
+
+
+        await loadMembers();
+
+    }
+
+
+    /* =====================================================
+       MODAL MEMBRE
+    ===================================================== */
+
+    function closeMemberModal() {
+
+        document
+            .getElementById(
+                "memberModal"
+            )
+            .classList.remove("show");
+
+    }
+
+
+    /* =====================================================
+       MODAL CODE
+    ===================================================== */
+
+    function closeCodeModal() {
+
+        document
+            .getElementById(
+                "codeModal"
+            )
+            .classList.remove("show");
+
+    }
+
+
+    /* =====================================================
+       MESSAGES
+    ===================================================== */
+
+    function clearMessages() {
+
+        const error =
+            document.getElementById(
+                "memberError"
+            );
+
+        const success =
+            document.getElementById(
+                "memberSuccess"
+            );
+
+
+        error.classList.remove(
+            "show"
+        );
+
+        success.classList.remove(
+            "show"
+        );
+
+
+        error.textContent = "";
+        success.textContent = "";
+
+    }
+
+
+    function showError(message) {
+
+        const element =
+            document.getElementById(
+                "memberError"
+            );
+
+
+        element.textContent =
+            message;
+
+
+        element.classList.add(
+            "show"
+        );
+
+    }
+
+
+    function showSuccess(message) {
+
+        const element =
+            document.getElementById(
+                "memberSuccess"
+            );
+
+
+        element.textContent =
+            message;
+
+
+        element.classList.add(
+            "show"
+        );
+
+    }
+
+
+    /* =====================================================
+       ESCAPE HTML
+    ===================================================== */
+
+    function escapeHTML(value) {
+
+        return String(value)
+            .replace(
+                /&/g,
+                "&amp;"
+            )
+            .replace(
+                /</g,
+                "&lt;"
+            )
+            .replace(
+                />/g,
+                "&gt;"
+            )
+            .replace(
+                /"/g,
+                "&quot;"
+            )
+            .replace(
+                /'/g,
+                "&#039;"
+            );
+
+    }
+
+
+    /* =====================================================
+       FERMETURE MODALS
+    ===================================================== */
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const memberModal =
+                document.getElementById(
+                    "memberModal"
+                );
+
+            const codeModal =
+                document.getElementById(
+                    "codeModal"
+                );
+
+
+            if (
+                event.target ===
+                memberModal
+            ) {
+
+                closeMemberModal();
+
+            }
+
+
+            if (
+                event.target ===
+                codeModal
+            ) {
+
+                closeCodeModal();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       TOUCHE ESC
+    ===================================================== */
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                closeMemberModal();
+                closeCodeModal();
+
+            }
+
+        }
+    );
+
+    </script>
+
+</body>
+</html>
